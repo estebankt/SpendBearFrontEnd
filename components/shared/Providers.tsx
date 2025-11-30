@@ -19,7 +19,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <Auth0Provider>
+    <Auth0Provider
+      user={{
+        profileUrl: '/api/auth/me',
+      }}
+    >
       <QueryClientProvider client={queryClient}>
         {children}
         <Toaster position="top-right" richColors />
