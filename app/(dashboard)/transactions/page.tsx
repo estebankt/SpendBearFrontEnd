@@ -1,5 +1,3 @@
-'use client';
-
 import { QuickAddForm } from '@/components/features/transactions/QuickAddForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Receipt } from 'lucide-react';
