@@ -44,6 +44,7 @@ export function QuickAddForm() {
     try {
       await createTransaction.mutateAsync({
         amount: parseFloat(data.amount),
+        currency: 'USD',
         description: data.description,
         categoryId: data.categoryId,
         date: data.date,

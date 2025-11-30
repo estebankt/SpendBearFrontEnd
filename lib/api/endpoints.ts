@@ -71,8 +71,8 @@ export const dashboardApi = {
 
 // User API
 export const userApi = {
-  getProfile: () => apiClient.get<ApiResponse<{ email: string; name: string }>>('/user/profile'),
+  getProfile: () => apiClient.get<ApiResponse<{ email: string; name: string }>>('/identity/me'),
 
   updateProfile: (data: { name?: string }) =>
-    apiClient.patch<ApiResponse<{ email: string; name: string }>>('/user/profile', data),
+    apiClient.patch<ApiResponse<{ email: string; name: string }>>('/identity/me', data),
 };

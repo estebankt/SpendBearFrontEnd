@@ -49,7 +49,7 @@ export interface Transaction {
 
 export interface CreateTransactionInput {
   amount: number;
-  currency?: string;
+  currency: string;
   description: string;
   categoryId: string;
   date: string;
