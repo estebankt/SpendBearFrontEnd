@@ -16,10 +16,10 @@ import { usePathname } from 'next/navigation';
 import { useAppStore } from '@/lib/stores/app.store';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/dashboard/transactions', label: 'Transactions', icon: Receipt },
-  { href: '/dashboard/budgets', label: 'Budgets', icon: Wallet },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+  { href: '/', label: 'Dashboard', icon: Home },
+  { href: '/transactions', label: 'Transactions', icon: Receipt },
+  { href: '/budgets', label: 'Budgets', icon: Wallet },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export function Navigation() {
@@ -32,7 +32,7 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-lg">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
               <Wallet className="w-4 h-4 text-primary-foreground" />
             </div>
@@ -72,7 +72,7 @@ export function Navigation() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings" className="cursor-pointer">
+                  <Link href="/settings" className="cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
                   </Link>
