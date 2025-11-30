@@ -17,17 +17,17 @@ import type {
 // Transactions API
 export const transactionsApi = {
   getAll: (filters?: TransactionFilters) =>
-    apiClient.get<PaginatedResponse<Transaction>>('/transactions', { params: filters }),
+    apiClient.get<PaginatedResponse<Transaction>>('/spending/transactions', { params: filters }),
 
-  getById: (id: string) => apiClient.get<ApiResponse<Transaction>>(`/transactions/${id}`),
+  getById: (id: string) => apiClient.get<ApiResponse<Transaction>>(`/spending/transactions/${id}`),
 
   create: (data: CreateTransactionInput) =>
-    apiClient.post<ApiResponse<Transaction>>('/transactions', data),
+    apiClient.post<ApiResponse<Transaction>>('/spending/transactions', data),
 
   update: ({ id, ...data }: UpdateTransactionInput) =>
-    apiClient.patch<ApiResponse<Transaction>>(`/transactions/${id}`, data),
+    apiClient.put<ApiResponse<Transaction>>(`/spending/transactions/${id}`, data),
 
-  delete: (id: string) => apiClient.delete<ApiResponse<void>>(`/transactions/${id}`),
+  delete: (id: string) => apiClient.delete<ApiResponse<void>>(`/spending/transactions/${id}`),
 };
 
 // Budgets API
@@ -48,17 +48,17 @@ export const budgetsApi = {
 
 // Categories API
 export const categoriesApi = {
-  getAll: () => apiClient.get<ApiResponse<Category[]>>('/categories'),
+  getAll: () => apiClient.get<ApiResponse<Category[]>>('/spending/categories'),
 
-  getById: (id: string) => apiClient.get<ApiResponse<Category>>(`/categories/${id}`),
+  getById: (id: string) => apiClient.get<ApiResponse<Category>>(`/spending/categories/${id}`),
 
   create: (data: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) =>
-    apiClient.post<ApiResponse<Category>>('/categories', data),
+    apiClient.post<ApiResponse<Category>>('/spending/categories', data),
 
   update: (id: string, data: Partial<Category>) =>
-    apiClient.patch<ApiResponse<Category>>(`/categories/${id}`, data),
+    apiClient.patch<ApiResponse<Category>>(`/spending/categories/${id}`, data),
 
-  delete: (id: string) => apiClient.delete<ApiResponse<void>>(`/categories/${id}`),
+  delete: (id: string) => apiClient.delete<ApiResponse<void>>(`/spending/categories/${id}`),
 };
 
 // Dashboard API

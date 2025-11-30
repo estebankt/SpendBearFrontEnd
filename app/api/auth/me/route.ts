@@ -11,7 +11,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
     const res = new Response(); // Create a dummy Response object for the signature
     const { token } = await auth0.getAccessToken(req, res);
-    return NextResponse.json({ user: session.user, token }) as Response;
+    return NextResponse.json({ user: session.user, accessToken: token }) as Response;
   } catch (error) {
     console.error('API /api/auth/me error:', error);
     const message = error instanceof Error ? error.message : 'Internal server error';

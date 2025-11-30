@@ -11,4 +11,9 @@ export const auth0 = new Auth0Client({
     audience: process.env.AUTH0_AUDIENCE,
     scope: process.env.AUTH0_SCOPE,
   },
+  routes: {
+    callback: '/api/auth/callback',
+    login: '/api/auth/login',
+    logout: '/api/auth/logout',
+  },
 });

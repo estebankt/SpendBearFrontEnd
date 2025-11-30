@@ -2,5 +2,11 @@ import { NextRequest } from 'next/server';
 import { auth0 } from '@/lib/auth0';
 
 export async function GET(request: NextRequest) {
-  return auth0.middleware(request);
+  // Access the internal authClient which has the handleCallback method
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const authClient = (auth0 as any).authClient;
+  if (!authClient || typeof authClient.handleCallback !== 'function') {
+    return new Response('Auth client not properly initialized', { status: 500 });
+  }
+  return authClient.handleCallback(request);
 }
