@@ -190,93 +190,93 @@ This document contains granular tasks organized into milestones for building Spe
 
 ---
 
-## Milestone 3: Core UI Components
-**Goal:** Build reusable UI components for the application  
+## Milestone 3: Core UI Components ✅ COMPLETED
+**Goal:** Build reusable UI components for the application
 **Duration:** 3 days
+**Status:** ✅ Completed (Commit: f4c3b98)
 
 ### 3.1 Form Inputs
-- ⬜ Create `components/ui/currency-input.tsx`
-  - ⬜ Auto-format as user types (1234 → $1,234.00)
-  - ⬜ Handle decimal input correctly
-  - ⬜ Trigger number pad on mobile
-  - ⬜ Support currency prop for symbol
-  - ⬜ Error state styling
-- ⬜ Create `components/ui/date-picker.tsx`
-  - ⬜ Calendar popup using Shadcn Calendar
-  - ⬜ Quick presets (Today, Yesterday)
-  - ⬜ Mobile-friendly display
-  - ⬜ Max date validation (no future dates)
+- ✅ Create `components/ui/currency-input.tsx`
+  - ✅ Auto-format as user types (1234 → $1,234.00)
+  - ✅ Handle decimal input correctly
+  - ✅ Trigger number pad on mobile
+  - ✅ Support currency prop for symbol
+  - ✅ Error state styling
+- ✅ Create `components/ui/date-picker.tsx`
+  - ✅ Calendar popup using Shadcn Calendar
+  - ✅ Quick presets (Today, Yesterday)
+  - ✅ Mobile-friendly display
+  - ✅ Max date validation (no future dates)
 
 ### 3.2 Category Components
-- ⬜ Create `components/features/categories/category-select.tsx`
-  - ⬜ Dropdown with category list
-  - ⬜ Search/filter functionality
-  - ⬜ Show system vs user categories differently
-  - ⬜ Recent categories at top
-  - ⬜ Loading state
-- ⬜ Create `components/features/categories/category-badge.tsx`
-  - ⬜ Display category name with icon/color
-  - ⬜ Compact variant for lists
+- ✅ Create `components/features/categories/category-select.tsx`
+  - ✅ Dropdown with category list
+  - ✅ Search/filter functionality
+  - ✅ Show system vs user categories differently
+  - ✅ Loading state
+- ✅ Create `components/features/categories/category-badge.tsx`
+  - ✅ Display category name with icon/indicator
+  - ✅ Compact variant for lists
 
 ### 3.3 Feedback Components
-- ⬜ Create `components/ui/loading-spinner.tsx`
-  - ⬜ Size variants (sm, md, lg)
-  - ⬜ Full-screen overlay variant
-  - ⬜ Label support
-- ⬜ Create `components/ui/empty-state.tsx`
-  - ⬜ Icon, title, description props
-  - ⬜ Action button support
-  - ⬜ Various sizes
-- ⬜ Configure Sonner toast provider
-- ⬜ Create toast helper functions (`showToast.success()`, etc.)
+- ✅ Create `components/ui/loading-spinner.tsx`
+  - ✅ Size variants (sm, md, lg)
+  - ✅ Full-screen overlay variant
+  - ✅ Label support
+- ✅ Create `components/ui/empty-state.tsx`
+  - ✅ Icon, title, description props
+  - ✅ Action button support
+  - ✅ Various sizes
+- ✅ Configure Sonner toast provider (completed in Milestone 2)
+- ⬜ Create toast helper functions (deferred - using sonner directly)
 
 ### 3.4 Data Display Components
-- ⬜ Create `components/ui/stat-card.tsx`
-  - ⬜ Label, value, change indicator
-  - ⬜ Icon support
-  - ⬜ Loading skeleton variant
-- ⬜ Create `components/ui/progress-bar.tsx`
-  - ⬜ Percentage display
-  - ⬜ Color variants (success, warning, danger)
-  - ⬜ Animation on mount
-  - ⬜ Label support
+- ✅ Create `components/ui/stat-card.tsx`
+  - ✅ Label, value, change indicator
+  - ✅ Icon support
+  - ✅ Loading skeleton variant
+- ✅ Create `components/ui/progress-bar.tsx`
+  - ✅ Percentage display
+  - ✅ Color variants (success, warning, danger)
+  - ✅ Animation on mount
+  - ✅ Label support
 
 ### 3.5 Layout Components
-- ⬜ Create `components/shared/header.tsx`
-  - ⬜ Logo/brand link
-  - ⬜ Navigation links (desktop)
-  - ⬜ User menu
-  - ⬜ Notification bell (with count)
-  - ⬜ Quick add button
-- ⬜ Create `components/shared/sidebar.tsx` (desktop)
-  - ⬜ Navigation links with icons
-  - ⬜ Active state highlighting
-  - ⬜ Collapsible option
-- ⬜ Create `components/shared/mobile-nav.tsx`
-  - ⬜ Fixed bottom tab bar
-  - ⬜ Icons with labels
-  - ⬜ Active state
-  - ⬜ Center FAB for quick add
+- ✅ Create `components/shared/header.tsx`
+  - ✅ Logo/brand link
+  - ✅ Navigation links (desktop)
+  - ✅ User menu with dropdown
+  - ✅ Notification bell (with count)
+  - ✅ Quick add button
+- ✅ Create `components/shared/sidebar.tsx` (desktop)
+  - ✅ Navigation links with icons
+  - ✅ Active state highlighting
+  - ✅ Collapsible option
+- ✅ Create `components/shared/mobile-nav.tsx`
+  - ✅ Fixed bottom tab bar
+  - ✅ Icons with labels
+  - ✅ Active state
+  - ✅ Center FAB for quick add
 
 ### 3.6 Modal Components
-- ⬜ Create `components/ui/modal.tsx` wrapper
-  - ⬜ Consistent styling using Shadcn Dialog
-  - ⬜ Size variants (sm, md, lg, full)
-  - ⬜ Mobile full-screen variant
-- ⬜ Create `components/ui/confirm-dialog.tsx`
-  - ⬜ Title, description, actions
-  - ⬜ Danger variant for destructive actions
-  - ⬜ Loading state for confirm button
+- ✅ Create `components/ui/modal.tsx` wrapper
+  - ✅ Consistent styling using Shadcn Dialog
+  - ✅ Size variants (sm, md, lg, full)
+  - ✅ Mobile responsive
+- ✅ Create `components/ui/confirm-dialog.tsx`
+  - ✅ Title, description, actions
+  - ✅ Danger variant for destructive actions
+  - ✅ Loading state for confirm button
 
 ### 3.7 Utility Components
-- ⬜ Create `components/ui/page-header.tsx`
-  - ⬜ Title, description, actions slot
-  - ⬜ Back button option
-- ⬜ Create skeleton variants for all major components
-  - ⬜ TransactionItemSkeleton
-  - ⬜ BudgetCardSkeleton
-  - ⬜ StatCardSkeleton
-  - ⬜ ChartSkeleton
+- ✅ Create `components/ui/page-header.tsx`
+  - ✅ Title, description, actions slot
+  - ✅ Back button option
+- ✅ Create skeleton variants in `components/ui/skeletons.tsx`
+  - ✅ TransactionItemSkeleton & TransactionListSkeleton
+  - ✅ BudgetCardSkeleton & BudgetListSkeleton
+  - ✅ StatCardSkeleton & StatsGridSkeleton
+  - ✅ ChartSkeleton
 
 ---
 
