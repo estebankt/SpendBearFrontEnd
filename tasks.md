@@ -1,406 +1,616 @@
-# Frontend Tasks - SpendBear MVP
+# SpendBear Frontend - Task Breakdown
 
-## Current Sprint (Week 1: Setup & Auth)
+## Overview
 
-### Critical Path
-- [x] Initialize Next.js 15 project with TypeScript
-  - Details: Use create-next-app with app router
-  - Command: `npx create-next-app@latest frontend --typescript --tailwind --app`
-  - Completed: 2024-11-29
+This document contains granular tasks organized into milestones for building SpendBear Frontend from scratch. Each task is designed to be completable in a single focused session.
 
-- [ ] **Setup development environment**
-  - Details: ESLint, Prettier, Husky, lint-staged
-  - Estimate: 1h
-  - Priority: High
-  
-- [ ] **Install and configure Auth0**
-  - Details: @auth0/nextjs-auth0, environment variables, API routes
-  - Estimate: 2h
-  - Priority: Critical
-  - Docs: https://auth0.com/docs/quickstart/webapp/nextjs
+**Legend:**
+- ⬜ Not Started
+- 🔄 In Progress
+- ✅ Completed
+- ⏸️ Blocked
 
-- [ ] **Create authentication flow**
-  - Details: Login page, callback handler, logout, protected routes
-  - Estimate: 3h
-  - Priority: Critical
-  - Acceptance: User can login and see their email on dashboard
+---
 
-- [ ] **Setup API client with Axios**
-  - Details: Base configuration, interceptors, error handling
-  - Estimate: 2h
-  - Priority: High
-  
-- [ ] **Configure Shadcn/ui**
-  - Details: Install, setup components.json, add first components
-  - Estimate: 1h
-  - Priority: High
-  - Command: `npx shadcn-ui@latest init`
+## Milestone 0: Project Initialization
+**Goal:** Set up the development environment and project scaffolding  
+**Duration:** 1 day
 
-### Foundation Components
-- [ ] **Create layout structure**
-  - Details: Root layout, dashboard layout, navigation
-  - Estimate: 2h
-  - Files: app/layout.tsx, app/(dashboard)/layout.tsx
+### 0.1 Project Setup
+- ⬜ Create Next.js 15 project with TypeScript (`npx create-next-app@latest spendbear-frontend --typescript --tailwind --app --src-dir=false`)
+- ⬜ Configure strict TypeScript settings in `tsconfig.json`
+- ⬜ Set up path aliases (`@/` for root imports)
+- ⬜ Create initial folder structure per CLAUDE.md
+- ⬜ Initialize git repository with `.gitignore`
 
-- [ ] **Build Navigation component**
-  - Details: Desktop nav, mobile bottom bar, active states
-  - Estimate: 3h
-  - Components: Navigation.tsx, MobileNav.tsx
+### 0.2 Tailwind & Styling Setup
+- ⬜ Configure Tailwind CSS v4
+- ⬜ Set up CSS custom properties (colors, spacing)
+- ⬜ Create `globals.css` with base styles
+- ⬜ Add Inter font via next/font
+- ⬜ Configure dark mode support (class-based, for future)
 
-- [ ] **Setup loading states**
-  - Details: Spinner, skeleton components, suspense boundaries
-  - Estimate: 1h
-  - Components: LoadingSpinner.tsx, Skeleton.tsx
+### 0.3 Shadcn/ui Installation
+- ⬜ Initialize Shadcn/ui (`npx shadcn@latest init`)
+- ⬜ Install core components: Button, Card, Input, Label
+- ⬜ Install form components: Form, FormField, FormItem, FormMessage
+- ⬜ Install feedback components: Dialog, Sonner (toast)
+- ⬜ Install data components: Select, Progress, Skeleton
+- ⬜ Create `cn()` utility function
 
-## Sprint 2 (Week 2: Core Transaction Features)
+### 0.4 Development Tooling
+- ⬜ Configure ESLint with Next.js rules
+- ⬜ Set up Prettier with Tailwind plugin
+- ⬜ Create `.prettierrc` and `.eslintrc.json`
+- ⬜ Add lint-staged and husky for pre-commit hooks
+- ⬜ Create `npm run format` and `npm run lint:fix` scripts
 
-### Transaction Management
-- [ ] **Create TransactionForm component**
-  - Details: All fields, validation, number formatting
-  - Estimate: 4h
-  - Priority: Critical
-  - Dependencies: API client, form validation
-  ```typescript
-  // Required fields implementation
-  - Amount input with currency formatting
-  - Category dropdown with icons
-  - Date picker with today default
-  - Optional merchant and notes
-  ```
+### 0.5 Environment & Documentation
+- ⬜ Create `.env.local.example` with all required variables
+- ⬜ Add environment variable validation (zod or custom)
+- ⬜ Copy documentation files (PRD.md, CLAUDE.md, PLANNING.md, TASKS.md)
+- ⬜ Create README.md with setup instructions
+- ⬜ Verify `npm run dev` starts without errors
 
-- [ ] **Implement form validation with Zod**
-  - Details: Schema definitions, error messages
-  - Estimate: 2h
-  - Priority: High
-  ```typescript
-  const transactionSchema = z.object({
-    amount: z.number().positive(),
-    categoryId: z.string().uuid(),
-    date: z.date(),
-    merchant: z.string().optional(),
-    notes: z.string().max(500).optional(),
-  });
-  ```
+---
 
-- [ ] **Build QuickAdd button**
-  - Details: Floating action button, modal trigger
-  - Estimate: 1h
-  - Priority: High
-  - Mobile: Fixed bottom-right
-  - Desktop: Header button
+## Milestone 1: Authentication
+**Goal:** Implement complete Auth0 authentication flow  
+**Duration:** 2 days
 
-- [ ] **Create transaction API hooks**
-  - Details: useCreateTransaction, useTransactions, useUpdateTransaction
-  - Estimate: 3h
-  - Priority: Critical
-  ```typescript
-  // lib/hooks/useTransactions.ts
-  - React Query mutations
-  - Optimistic updates
-  - Cache invalidation
-  ```
+### 1.1 Auth0 SDK Setup
+- ⬜ Install `@auth0/nextjs-auth0`
+- ⬜ Create `app/api/auth/[...auth0]/route.ts` handler
+- ⬜ Configure Auth0 environment variables
+- ⬜ Set up `AUTH0_BASE_URL`, `AUTH0_ISSUER_BASE_URL`, etc.
+- ⬜ Verify Auth0 tenant configuration matches frontend URLs
 
-- [ ] **Build TransactionList component**
-  - Details: List view, grouping by date, loading states
-  - Estimate: 3h
-  - Priority: High
-  - Features: Infinite scroll or pagination
+### 1.2 Auth Provider & Context
+- ⬜ Create `lib/providers/auth-provider.tsx` with UserProvider
+- ⬜ Wrap app in UserProvider in root layout
+- ⬜ Create `lib/hooks/use-user.ts` custom hook
+- ⬜ Add user state typing (Auth0User interface)
 
-- [ ] **Implement transaction details modal**
-  - Details: View full details, edit, delete actions
-  - Estimate: 2h
-  - Priority: Medium
+### 1.3 Landing Page
+- ⬜ Create `app/page.tsx` (landing page)
+- ⬜ Design hero section with value proposition
+- ⬜ Add "Get Started" button linking to `/api/auth/login`
+- ⬜ Add simple feature highlights (3 points max)
+- ⬜ Make landing page fully responsive
+- ⬜ Add SpendBear logo/branding
 
-### Category Management
-- [ ] **Create CategorySelector component**
-  - Details: Dropdown with icons, search, create new
-  - Estimate: 3h
-  - Priority: High
-  - Features: Recent categories first, emoji support
+### 1.4 Auth Callback Handling
+- ⬜ Create `app/(auth)/callback/page.tsx`
+- ⬜ Handle Auth0 callback redirect
+- ⬜ Check if user exists in backend (`GET /api/identity/me`)
+- ⬜ Register new user if 404 (`POST /api/identity/register`)
+- ⬜ Redirect to dashboard after successful auth
+- ⬜ Show loading state during auth processing
 
-- [ ] **Setup category API hooks**
-  - Details: useCategories, useCreateCategory
-  - Estimate: 1h
-  - Priority: High
+### 1.5 Protected Route Middleware
+- ⬜ Create `middleware.ts` for route protection
+- ⬜ Configure protected routes pattern (`/dashboard/*`)
+- ⬜ Redirect unauthenticated users to login
+- ⬜ Allow public routes (landing, login, callback)
 
-## Sprint 3 (Week 3: Dashboard & Analytics)
+### 1.6 Auth UI Components
+- ⬜ Create `components/shared/user-menu.tsx` (dropdown)
+- ⬜ Add user avatar/initials display
+- ⬜ Add logout button (`/api/auth/logout`)
+- ⬜ Create login button component for reuse
+- ⬜ Add loading skeleton for auth state
 
-### Dashboard Implementation
-- [ ] **Build Dashboard page structure**
-  - Details: Grid layout, responsive design
-  - Estimate: 2h
-  - Priority: Critical
-  - Layout: Cards for widgets, mobile-optimized
+### 1.7 Auth Testing
+- ⬜ Test full login flow (landing → Auth0 → callback → dashboard)
+- ⬜ Test new user registration flow
+- ⬜ Test returning user login flow
+- ⬜ Test logout flow
+- ⬜ Test protected route redirect
+- ⬜ Test token refresh (if applicable)
 
-- [ ] **Create SpendingSummary card**
-  - Details: Current month total, comparison, trend
-  - Estimate: 3h
-  - Priority: Critical
-  ```typescript
-  // Features needed:
-  - Current month total
-  - Percentage change from last month
-  - Mini sparkline chart
-  - Loading skeleton
-  ```
+---
 
-- [ ] **Build BudgetStatus cards**
-  - Details: Progress bars, remaining amounts, alerts
-  - Estimate: 3h
-  - Priority: Critical
-  ```typescript
-  // components/features/budgets/BudgetCard.tsx
-  - Progress visualization
-  - Color coding (green/yellow/red)
-  - Days remaining
-  - Click to manage
-  ```
+## Milestone 2: API Client & Core Hooks
+**Goal:** Set up API communication layer and data fetching hooks  
+**Duration:** 2 days
 
-- [ ] **Implement RecentTransactions widget**
-  - Details: Last 5 transactions, relative time
-  - Estimate: 2h
-  - Priority: High
+### 2.1 Axios Client Setup
+- ⬜ Install `axios`
+- ⬜ Create `lib/api/client.ts` with base configuration
+- ⬜ Set baseURL from environment variable
+- ⬜ Configure request timeout (10s)
+- ⬜ Add request interceptor for Auth0 token injection
 
-- [ ] **Setup Chart.js integration**
-  - Details: Install, configure, create wrapper components
-  - Estimate: 2h
-  - Priority: Medium
-  - Package: react-chartjs-2
+### 2.2 Auth Token Integration
+- ⬜ Create `lib/api/get-token.ts` for server-side token retrieval
+- ⬜ Create client-side token fetching (if needed)
+- ⬜ Add Authorization header to all requests
+- ⬜ Handle 401 responses (redirect to login)
+- ⬜ Add response error interceptor
 
-- [ ] **Create SpendingChart component**
-  - Details: 30-day trend, category breakdown
-  - Estimate: 4h
-  - Priority: Medium
-  ```typescript
-  // Chart types:
-  - Line chart for daily spending
-  - Pie chart for category breakdown
-  - Bar chart for monthly comparison
-  ```
+### 2.3 API Type Definitions
+- ⬜ Create `types/api.ts` with all API response types
+- ⬜ Define Transaction type
+- ⬜ Define Budget type
+- ⬜ Define Category type
+- ⬜ Define MonthlySummary type
+- ⬜ Define Notification type
+- ⬜ Define paginated response wrapper type
+- ⬜ Define API error response type
 
-### Real-time Updates
-- [ ] **Implement dashboard data fetching**
-  - Details: Parallel queries, caching strategy
-  - Estimate: 3h
-  - Priority: High
-  ```typescript
-  // Caching strategy:
-  - User profile: No refetch
-  - Dashboard: 5 min cache
-  - Budgets: 30 sec cache
-  - Transactions: 1 min cache
-  ```
+### 2.4 API Endpoint Functions
+- ⬜ Create `lib/api/endpoints.ts`
+- ⬜ Implement `transactionApi` (list, create, update, delete)
+- ⬜ Implement `budgetApi` (list, create, update, delete)
+- ⬜ Implement `categoryApi` (list, create)
+- ⬜ Implement `analyticsApi` (monthlySummary)
+- ⬜ Implement `notificationApi` (list, markRead)
+- ⬜ Implement `identityApi` (me, register)
 
-- [ ] **Add pull-to-refresh on mobile**
-  - Details: Touch gesture, loading indicator
-  - Estimate: 2h
-  - Priority: Medium
+### 2.5 TanStack Query Setup
+- ⬜ Install `@tanstack/react-query`
+- ⬜ Create `lib/providers/query-provider.tsx`
+- ⬜ Configure QueryClient with default options
+- ⬜ Set default stale times and cache times
+- ⬜ Add QueryClientProvider to root layout
+- ⬜ Install React Query DevTools (dev only)
 
-## Sprint 4 (Week 4: Budget Management)
+### 2.6 Data Fetching Hooks
+- ⬜ Create `lib/hooks/use-transactions.ts`
+  - ⬜ `useTransactions(filters)` - list query
+  - ⬜ `useCreateTransaction()` - mutation
+  - ⬜ `useUpdateTransaction()` - mutation
+  - ⬜ `useDeleteTransaction()` - mutation
+- ⬜ Create `lib/hooks/use-budgets.ts`
+  - ⬜ `useBudgets(filters)` - list query
+  - ⬜ `useActiveBudgets()` - active only query
+  - ⬜ `useCreateBudget()` - mutation
+  - ⬜ `useUpdateBudget()` - mutation
+  - ⬜ `useDeleteBudget()` - mutation
+- ⬜ Create `lib/hooks/use-categories.ts`
+  - ⬜ `useCategories()` - list query
+  - ⬜ `useCreateCategory()` - mutation
+- ⬜ Create `lib/hooks/use-analytics.ts`
+  - ⬜ `useMonthlySummary(year, month)` - query
+- ⬜ Create `lib/hooks/use-notifications.ts`
+  - ⬜ `useNotifications(filters)` - list query
+  - ⬜ `useUnreadCount()` - query
+  - ⬜ `useMarkNotificationRead()` - mutation
 
-### Budget Features
-- [ ] **Create Budget list page**
-  - Details: Grid/list view, status indicators
-  - Estimate: 2h
-  - Priority: High
+### 2.7 Cache Invalidation Logic
+- ⬜ Configure transaction mutations to invalidate analytics
+- ⬜ Configure transaction mutations to invalidate budgets
+- ⬜ Configure budget mutations to invalidate budget list
+- ⬜ Add optimistic updates for transaction creation
+- ⬜ Add rollback on mutation errors
 
-- [ ] **Build CreateBudget form**
-  - Details: Amount, period, category selection
-  - Estimate: 3h
-  - Priority: High
-  ```typescript
-  // Form fields:
-  - Budget name
-  - Amount limit (slider + input)
-  - Period (monthly for MVP)
-  - Category (optional)
-  - Start date
-  ```
+---
 
-- [ ] **Implement BudgetProgress component**
-  - Details: Visual progress bar, animations
-  - Estimate: 2h
-  - Priority: High
+## Milestone 3: Core UI Components
+**Goal:** Build reusable UI components for the application  
+**Duration:** 3 days
 
-- [ ] **Create budget API hooks**
-  - Details: useBudgets, useCreateBudget, useUpdateBudget
-  - Estimate: 2h
-  - Priority: High
+### 3.1 Form Inputs
+- ⬜ Create `components/ui/currency-input.tsx`
+  - ⬜ Auto-format as user types (1234 → $1,234.00)
+  - ⬜ Handle decimal input correctly
+  - ⬜ Trigger number pad on mobile
+  - ⬜ Support currency prop for symbol
+  - ⬜ Error state styling
+- ⬜ Create `components/ui/date-picker.tsx`
+  - ⬜ Calendar popup using Shadcn Calendar
+  - ⬜ Quick presets (Today, Yesterday)
+  - ⬜ Mobile-friendly display
+  - ⬜ Max date validation (no future dates)
 
-- [ ] **Build budget threshold notifications**
-  - Details: Toast notifications, real-time updates
-  - Estimate: 3h
-  - Priority: High
-  - Implementation: React Hot Toast
+### 3.2 Category Components
+- ⬜ Create `components/features/categories/category-select.tsx`
+  - ⬜ Dropdown with category list
+  - ⬜ Search/filter functionality
+  - ⬜ Show system vs user categories differently
+  - ⬜ Recent categories at top
+  - ⬜ Loading state
+- ⬜ Create `components/features/categories/category-badge.tsx`
+  - ⬜ Display category name with icon/color
+  - ⬜ Compact variant for lists
 
-- [ ] **Add budget editing capabilities**
-  - Details: Inline edit, modal form
-  - Estimate: 2h
-  - Priority: Medium
+### 3.3 Feedback Components
+- ⬜ Create `components/ui/loading-spinner.tsx`
+  - ⬜ Size variants (sm, md, lg)
+  - ⬜ Full-screen overlay variant
+  - ⬜ Label support
+- ⬜ Create `components/ui/empty-state.tsx`
+  - ⬜ Icon, title, description props
+  - ⬜ Action button support
+  - ⬜ Various sizes
+- ⬜ Configure Sonner toast provider
+- ⬜ Create toast helper functions (`showToast.success()`, etc.)
 
-## Polish & Optimization Sprint
+### 3.4 Data Display Components
+- ⬜ Create `components/ui/stat-card.tsx`
+  - ⬜ Label, value, change indicator
+  - ⬜ Icon support
+  - ⬜ Loading skeleton variant
+- ⬜ Create `components/ui/progress-bar.tsx`
+  - ⬜ Percentage display
+  - ⬜ Color variants (success, warning, danger)
+  - ⬜ Animation on mount
+  - ⬜ Label support
 
-### Performance
-- [ ] **Implement code splitting**
-  - Details: Dynamic imports, route-based splitting
-  - Estimate: 2h
-  - Priority: Medium
+### 3.5 Layout Components
+- ⬜ Create `components/shared/header.tsx`
+  - ⬜ Logo/brand link
+  - ⬜ Navigation links (desktop)
+  - ⬜ User menu
+  - ⬜ Notification bell (with count)
+  - ⬜ Quick add button
+- ⬜ Create `components/shared/sidebar.tsx` (desktop)
+  - ⬜ Navigation links with icons
+  - ⬜ Active state highlighting
+  - ⬜ Collapsible option
+- ⬜ Create `components/shared/mobile-nav.tsx`
+  - ⬜ Fixed bottom tab bar
+  - ⬜ Icons with labels
+  - ⬜ Active state
+  - ⬜ Center FAB for quick add
 
-- [ ] **Optimize bundle size**
-  - Details: Tree shaking, analyze bundle
-  - Estimate: 2h
-  - Priority: Medium
-  - Target: < 200KB initial load
+### 3.6 Modal Components
+- ⬜ Create `components/ui/modal.tsx` wrapper
+  - ⬜ Consistent styling using Shadcn Dialog
+  - ⬜ Size variants (sm, md, lg, full)
+  - ⬜ Mobile full-screen variant
+- ⬜ Create `components/ui/confirm-dialog.tsx`
+  - ⬜ Title, description, actions
+  - ⬜ Danger variant for destructive actions
+  - ⬜ Loading state for confirm button
 
-- [ ] **Add image optimization**
-  - Details: Next.js Image component, lazy loading
-  - Estimate: 1h
-  - Priority: Low
+### 3.7 Utility Components
+- ⬜ Create `components/ui/page-header.tsx`
+  - ⬜ Title, description, actions slot
+  - ⬜ Back button option
+- ⬜ Create skeleton variants for all major components
+  - ⬜ TransactionItemSkeleton
+  - ⬜ BudgetCardSkeleton
+  - ⬜ StatCardSkeleton
+  - ⬜ ChartSkeleton
 
-- [ ] **Implement error boundaries**
-  - Details: Graceful error handling, fallback UI
-  - Estimate: 2h
-  - Priority: High
+---
 
-### User Experience
-- [ ] **Add loading skeletons everywhere**
-  - Details: Consistent skeleton screens
-  - Estimate: 2h
-  - Priority: High
+## Milestone 4: Dashboard Layout & Shell
+**Goal:** Create the main dashboard structure and navigation  
+**Duration:** 1 day
 
-- [ ] **Create empty states**
-  - Details: No data messages, helpful actions
-  - Estimate: 2h
-  - Priority: Medium
+### 4.1 Dashboard Layout
+- ⬜ Create `app/(dashboard)/layout.tsx`
+- ⬜ Add session check (redirect if not authenticated)
+- ⬜ Implement responsive layout structure
+- ⬜ Desktop: sidebar + main content
+- ⬜ Mobile: header + content + bottom nav
+- ⬜ Add padding and max-width constraints
 
-- [ ] **Implement form persistence**
-  - Details: Save draft in localStorage
-  - Estimate: 2h
-  - Priority: Low
+### 4.2 Navigation Implementation
+- ⬜ Wire up Header component with user data
+- ⬜ Wire up Sidebar with route links
+- ⬜ Wire up MobileNav with route links
+- ⬜ Implement active route highlighting
+- ⬜ Add navigation links: Dashboard, Transactions, Budgets, Settings
 
-- [ ] **Add keyboard shortcuts**
-  - Details: Quick add (Cmd+N), search (Cmd+K)
-  - Estimate: 2h
-  - Priority: Low
+### 4.3 Quick Add Button Integration
+- ⬜ Create `components/features/transactions/quick-add-button.tsx`
+- ⬜ FAB style for mobile (fixed position)
+- ⬜ Header button for desktop
+- ⬜ Open transaction form modal on click
 
-### Testing
-- [ ] **Setup Jest and React Testing Library**
-  - Details: Configuration, example tests
-  - Estimate: 2h
-  - Priority: Medium
+### 4.4 Global Providers
+- ⬜ Verify all providers in root layout (Query, Auth, Toast)
+- ⬜ Add error boundary at layout level
+- ⬜ Add loading state for initial auth check
 
-- [ ] **Write component unit tests**
-  - Details: Critical components first
-  - Estimate: 4h
-  - Priority: Medium
-  - Coverage target: 60%
+---
 
-- [ ] **Create integration tests for API client**
-  - Details: Mock server, error scenarios
-  - Estimate: 3h
-  - Priority: Medium
+## Milestone 5: Transaction Features
+**Goal:** Implement complete transaction management  
+**Duration:** 3 days
 
-- [ ] **Setup Playwright for E2E**
-  - Details: Configuration, critical path tests
-  - Estimate: 3h
-  - Priority: Low
+### 5.1 Transaction Form
+- ⬜ Create `components/features/transactions/transaction-form.tsx`
+- ⬜ Integrate React Hook Form
+- ⬜ Add Zod validation schema
+- ⬜ Amount field (CurrencyInput)
+- ⬜ Category field (CategorySelect)
+- ⬜ Date field (DatePicker)
+- ⬜ Type toggle (Income/Expense)
+- ⬜ Description field (text input)
+- ⬜ Submit button with loading state
+- ⬜ Cancel button
 
-## Completed Tasks
+### 5.2 Transaction Form Modal
+- ⬜ Create transaction form dialog wrapper
+- ⬜ "Add Transaction" mode (create)
+- ⬜ "Edit Transaction" mode (update)
+- ⬜ Pre-populate form when editing
+- ⬜ Close on successful submit
+- ⬜ Show success toast
 
-### Project Setup (2024-11-29)
-- [x] Create project structure documentation (2h)
-- [x] Define component requirements (3h)
-- [x] Plan API integration strategy (1h)
-- [x] Design responsive layouts (2h)
+### 5.3 Transaction List Item
+- ⬜ Create `components/features/transactions/transaction-item.tsx`
+- ⬜ Display: category icon, description, amount, date
+- ⬜ Format amount with currency
+- ⬜ Show relative time (2 hours ago)
+- ⬜ Different styling for income vs expense
+- ⬜ Click to open edit modal
+- ⬜ Swipe to delete (mobile) - or delete button
 
-## Bug Fixes & Issues
+### 5.4 Transaction List
+- ⬜ Create `components/features/transactions/transaction-list.tsx`
+- ⬜ Fetch transactions using hook
+- ⬜ Group by date (Today, Yesterday, This Week, etc.)
+- ⬜ Infinite scroll or pagination
+- ⬜ Loading skeleton during fetch
+- ⬜ Empty state when no transactions
 
-### Known Issues
-- [ ] Auth0 callback URL needs configuration
-- [ ] CORS setup needed for local development
-- [ ] Environment variables documentation
+### 5.5 Transaction Filters
+- ⬜ Create filter bar component
+- ⬜ Date range filter (start date, end date)
+- ⬜ Category filter (select)
+- ⬜ Type filter (Income/Expense/All)
+- ⬜ Clear filters button
+- ⬜ Persist filters in URL params
 
-### Tech Debt
-- [ ] Refactor API client to use generated types
-- [ ] Implement proper error boundaries
-- [ ] Add internationalization support
-- [ ] Optimize re-renders with React.memo
+### 5.6 Transactions Page
+- ⬜ Create `app/(dashboard)/transactions/page.tsx`
+- ⬜ Page header with title and "Add" button
+- ⬜ Filter bar
+- ⬜ Transaction list
+- ⬜ Mobile-responsive layout
 
-## Future Features (Post-MVP)
+### 5.7 Delete Transaction Flow
+- ⬜ Add delete confirmation dialog
+- ⬜ Implement delete mutation
+- ⬜ Show success/error toast
+- ⬜ Remove from list optimistically
 
-### Phase 2
-- [ ] Dark mode toggle
-- [ ] CSV export functionality
-- [ ] Bulk transaction operations
-- [ ] Advanced filtering UI
-- [ ] Receipt photo upload
-- [ ] Offline support (PWA)
+---
 
-### Phase 3
-- [ ] Real-time collaboration
-- [ ] Spending predictions
-- [ ] Custom dashboard widgets
-- [ ] Data visualization options
-- [ ] Mobile app (React Native)
+## Milestone 6: Budget Features
+**Goal:** Implement budget creation, viewing, and monitoring  
+**Duration:** 2 days
 
-## Dependencies & Setup Commands
+### 6.1 Budget Form
+- ⬜ Create `components/features/budgets/budget-form.tsx`
+- ⬜ Name field (text input)
+- ⬜ Amount field (CurrencyInput)
+- ⬜ Period select (Monthly, Weekly, Custom)
+- ⬜ Start date field
+- ⬜ Category field (optional, for category-specific budgets)
+- ⬜ Warning threshold slider (50-100%)
+- ⬜ Zod validation schema
 
-```bash
-# Core dependencies to install
-npm install @auth0/nextjs-auth0 axios zustand
-npm install @tanstack/react-query @tanstack/react-query-devtools
-npm install react-hook-form @hookform/resolvers zod
-npm install chart.js react-chartjs-2
-npm install framer-motion react-hot-toast
-npm install lucide-react
-npm install date-fns
+### 6.2 Budget Card
+- ⬜ Create `components/features/budgets/budget-card.tsx`
+- ⬜ Display: name, spent/limit, progress bar
+- ⬜ Percentage indicator
+- ⬜ Color coding: green (<50%), yellow (50-80%), red (>80%)
+- ⬜ Days remaining in period
+- ⬜ Click to edit
+- ⬜ Delete button with confirmation
 
-# Dev dependencies
-npm install -D @types/node @types/react
-npm install -D eslint-config-next prettier
-npm install -D husky lint-staged
-npm install -D @testing-library/react @testing-library/jest-dom jest
+### 6.3 Budget List
+- ⬜ Create `components/features/budgets/budget-list.tsx`
+- ⬜ Fetch budgets using hook
+- ⬜ Grid layout (responsive)
+- ⬜ Loading skeletons
+- ⬜ Empty state with "Create Budget" CTA
 
-# Shadcn/ui components to add
-npx shadcn-ui@latest add button
-npx shadcn-ui@latest add card
-npx shadcn-ui@latest add form
-npx shadcn-ui@latest add input
-npx shadcn-ui@latest add select
-npx shadcn-ui@latest add dialog
-npx shadcn-ui@latest add toast
-npx shadcn-ui@latest add skeleton
-npx shadcn-ui@latest add progress
-npx shadcn-ui@latest add calendar
-npx shadcn-ui@latest add popover
-```
+### 6.4 Budgets Page
+- ⬜ Create `app/(dashboard)/budgets/page.tsx`
+- ⬜ Page header with "New Budget" button
+- ⬜ Active budgets section
+- ⬜ Expired/inactive budgets section (collapsed)
+- ⬜ Create budget modal
 
-## Definition of Done
+### 6.5 Budget CRUD Operations
+- ⬜ Create budget flow (form → mutation → success)
+- ⬜ Edit budget flow (load data → form → mutation)
+- ⬜ Delete budget flow (confirm → mutation → remove)
+- ⬜ Optimistic updates where appropriate
 
-A task is complete when:
-- [ ] Code is written and working
-- [ ] Component is responsive (mobile/desktop)
-- [ ] Loading and error states handled
-- [ ] Accessibility checked (keyboard nav, ARIA)
-- [ ] Unit tests written (if applicable)
-- [ ] Code reviewed (or self-reviewed)
-- [ ] Integrated with backend API
-- [ ] Deployed to staging
+---
 
-## Sprint Velocity
+## Milestone 7: Dashboard Home
+**Goal:** Build the main dashboard with summary and quick access  
+**Duration:** 2 days
 
-- Sprint 1: 20 story points (completed)
-- Sprint 2: 25 story points (target)
-- Sprint 3: 25 story points (target)
-- Sprint 4: 20 story points (target)
+### 7.1 Stats Cards
+- ⬜ Create `components/features/dashboard/stats-cards.tsx`
+- ⬜ Fetch monthly summary using hook
+- ⬜ Display: Total Spending, Total Income, Net Balance
+- ⬜ Comparison to previous month (percentage)
+- ⬜ Loading skeletons
+
+### 7.2 Spending Chart
+- ⬜ Create `components/features/dashboard/spending-chart.tsx`
+- ⬜ Install and configure Chart.js
+- ⬜ Pie/Donut chart for spending by category
+- ⬜ Legend with category names and amounts
+- ⬜ Responsive sizing
+- ⬜ Loading state
+
+### 7.3 Budget Overview Widget
+- ⬜ Create `components/features/dashboard/budget-overview.tsx`
+- ⬜ Fetch active budgets (limit 3)
+- ⬜ Compact budget cards with progress
+- ⬜ "View All" link to budgets page
+- ⬜ Loading skeleton
+
+### 7.4 Recent Transactions Widget
+- ⬜ Create `components/features/dashboard/recent-transactions.tsx`
+- ⬜ Fetch recent 5 transactions
+- ⬜ Compact transaction items
+- ⬜ "View All" link to transactions page
+- ⬜ Loading skeleton
+
+### 7.5 Dashboard Page Assembly
+- ⬜ Create `app/(dashboard)/page.tsx`
+- ⬜ Responsive grid layout
+- ⬜ Desktop: 3-column layout
+- ⬜ Mobile: single column stack
+- ⬜ Wire up all widgets
+- ⬜ Quick add FAB visible
+
+### 7.6 Dashboard Polish
+- ⬜ Add greeting with user name
+- ⬜ Add current date display
+- ⬜ Smooth loading transitions
+- ⬜ Error states for each widget
+- ⬜ Pull-to-refresh on mobile (if possible)
+
+---
+
+## Milestone 8: Notifications
+**Goal:** Display budget alerts and notifications  
+**Duration:** 1 day
+
+### 8.1 Notification Bell
+- ⬜ Create notification bell icon in header
+- ⬜ Display unread count badge
+- ⬜ Click to open notifications dropdown/panel
+
+### 8.2 Notification List
+- ⬜ Create `components/features/notifications/notification-list.tsx`
+- ⬜ Fetch notifications using hook
+- ⬜ Display notification type, message, time
+- ⬜ Mark as read on click
+- ⬜ Link to related budget
+
+### 8.3 Notification Item
+- ⬜ Create notification item component
+- ⬜ Different styling for read vs unread
+- ⬜ Icon based on notification type
+- ⬜ Relative timestamp
+
+---
+
+## Milestone 9: Settings & Profile
+**Goal:** User settings and profile management  
+**Duration:** 1 day
+
+### 9.1 Settings Page
+- ⬜ Create `app/(dashboard)/settings/page.tsx`
+- ⬜ Display user profile info (name, email)
+- ⬜ Logout button
+
+### 9.2 Profile Display
+- ⬜ Show user avatar (from Auth0 or initials)
+- ⬜ Show email address
+- ⬜ Member since date (if available)
+
+### 9.3 Category Management
+- ⬜ Add "Manage Categories" section to settings
+- ⬜ List custom categories
+- ⬜ "Add Category" button
+- ⬜ Create category form modal
+
+---
+
+## Milestone 10: Polish & Testing
+**Goal:** Final polish, testing, and production readiness  
+**Duration:** 2 days
+
+### 10.1 Error Handling
+- ⬜ Add ErrorBoundary components
+- ⬜ Create error fallback UI
+- ⬜ Handle API errors gracefully
+- ⬜ Display user-friendly error messages
+- ⬜ Retry mechanisms for failed requests
+
+### 10.2 Loading States
+- ⬜ Verify all async operations have loading states
+- ⬜ Add Suspense boundaries where appropriate
+- ⬜ Create loading.tsx files for routes
+
+### 10.3 Accessibility Audit
+- ⬜ Run axe-core accessibility checks
+- ⬜ Verify keyboard navigation
+- ⬜ Check focus management in modals
+- ⬜ Verify color contrast ratios
+- ⬜ Add missing ARIA labels
+
+### 10.4 Responsive Testing
+- ⬜ Test on mobile viewport (320px, 375px, 414px)
+- ⬜ Test on tablet viewport (768px)
+- ⬜ Test on desktop (1024px, 1280px)
+- ⬜ Fix any layout issues
+
+### 10.5 Performance Optimization
+- ⬜ Run Lighthouse audit
+- ⬜ Optimize bundle size (check imports)
+- ⬜ Lazy load chart components
+- ⬜ Optimize images
+- ⬜ Verify caching strategy
+
+### 10.6 Unit Tests
+- ⬜ Set up Jest and React Testing Library
+- ⬜ Write tests for utility functions (formatters)
+- ⬜ Write tests for Zod schemas
+- ⬜ Write tests for key components (TransactionForm)
+- ⬜ Write tests for hooks (mock API responses)
+
+### 10.7 Final Review
+- ⬜ Code review for consistency
+- ⬜ Remove console.log statements
+- ⬜ Update documentation
+- ⬜ Verify all environment variables documented
+- ⬜ Test full user flows end-to-end
+
+---
+
+## Milestone 11: Deployment
+**Goal:** Deploy to production  
+**Duration:** 1 day
+
+### 11.1 Vercel Setup
+- ⬜ Connect GitHub repository to Vercel
+- ⬜ Configure environment variables
+- ⬜ Set up production Auth0 application
+- ⬜ Update Auth0 callback URLs for production
+
+### 11.2 Production Configuration
+- ⬜ Verify NEXT_PUBLIC_API_URL points to production backend
+- ⬜ Configure custom domain (if available)
+- ⬜ Enable Vercel Analytics (optional)
+
+### 11.3 Post-Deployment
+- ⬜ Test production login flow
+- ⬜ Verify all features work in production
+- ⬜ Monitor for errors
+- ⬜ Update documentation with production URL
+
+---
+
+## Summary
+
+| Milestone | Tasks | Est. Duration |
+|-----------|-------|---------------|
+| 0. Project Init | 25 | 1 day |
+| 1. Authentication | 35 | 2 days |
+| 2. API & Hooks | 35 | 2 days |
+| 3. Core UI | 40 | 3 days |
+| 4. Dashboard Layout | 15 | 1 day |
+| 5. Transactions | 35 | 3 days |
+| 6. Budgets | 20 | 2 days |
+| 7. Dashboard Home | 25 | 2 days |
+| 8. Notifications | 10 | 1 day |
+| 9. Settings | 10 | 1 day |
+| 10. Polish & Testing | 35 | 2 days |
+| 11. Deployment | 10 | 1 day |
+| **Total** | **~295 tasks** | **~21 days** |
+
+---
 
 ## Notes
 
-- Focus on mobile-first design
-- Prioritize speed of data entry
-- Keep bundle size minimal
-- Test on real devices early
-- Use optimistic updates for better UX
-- Cache aggressively but invalidate smartly
-
-Last Updated: 2024-11-29
+- Tasks can be parallelized where dependencies allow
+- Prioritize Milestones 0-5 for core functionality
+- Milestone 8 (Notifications) can be deferred if needed
+- Each milestone should result in working, testable features

@@ -1,21 +1,9 @@
 import type { Metadata } from 'next';
-import { Inter, Montserrat } from 'next/font/google';
-import { Providers } from '@/components/shared/Providers';
 import './globals.css';
 
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-});
-
-const montserrat = Montserrat({
-  variable: '--font-montserrat',
-  subsets: ['latin'],
-});
-
 export const metadata: Metadata = {
-  title: 'SpendBear - Personal Finance Manager',
-  description: 'Track expenses, manage budgets, and take control of your finances',
+  title: 'SpendBear - Personal Finance Tracker',
+  description: 'Track your expenses and manage budgets with ease',
 };
 
 export default function RootLayout({
@@ -25,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
-        <Providers>{children}</Providers>
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

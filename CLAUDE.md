@@ -1,399 +1,522 @@
 # SpendBear Frontend - Claude Code Context
 
-## Frontend Overview
-A modern, responsive web application built with Next.js 15 to provide a clean interface for the SpendBear personal finance management system. Focus is on MVP functionality to validate core backend features.
+## Project Overview
 
-## Current Context
-- **Phase**: MVP Frontend Development
-- **Priority**: Core user flows (Auth → Add Transaction → View Budget → Dashboard)
-- **Design Philosophy**: Mobile-first, minimalist, fast
-- **Backend Integration**: API-first, real-time updates where critical
+SpendBear Frontend is a Next.js 15 application providing a clean, fast interface for personal finance management. This file provides context for Claude Code CLI to assist with development.
+
+## Current Status
+- **Phase**: MVP Development (Starting Fresh)
+- **Backend**: Stable, running on `http://localhost:5109`
+- **Priority**: Auth → Transactions → Budgets → Dashboard → Analytics
 
 ## Tech Stack
 
-### Core Framework
-- **Next.js 15** with App Router
-- **TypeScript** for type safety
-- **React 19** (via Next.js)
-- **Tailwind CSS** for styling
-- **Shadcn/ui** for component library
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS v4 + Shadcn/ui |
+| State | Zustand (UI) + TanStack Query (server) |
+| Forms | React Hook Form + Zod |
+| Auth | Auth0 (`@auth0/nextjs-auth0`) |
+| HTTP | Axios with interceptors |
+| Charts | Chart.js + react-chartjs-2 |
+| Icons | Lucide React |
+| Toasts | Sonner |
+| Animations | Framer Motion |
 
-### State Management
-- **Zustand** for global state (simple, lightweight)
-- **React Query (TanStack Query)** for server state
-- **React Hook Form** for form management
-- **Zod** for validation
+---
 
-### API & Auth
-- **Auth0 Next.js SDK** (@auth0/nextjs-auth0)
-- **Axios** for API calls with interceptors
-- **SWR** or React Query for data fetching
+## API Reference (v1.json)
 
-### UI Libraries
-- **Chart.js** with react-chartjs-2 for analytics
-- **Framer Motion** for animations
-- **React Hot Toast** for notifications
-- **Lucide React** for icons
+Backend base URL: `http://localhost:5109`  
+Auth: Bearer JWT token from Auth0
 
-### Development Tools
-- **ESLint** with Next.js config
-- **Prettier** for code formatting
-- **Husky** for git hooks
-- **Jest** & **React Testing Library** for tests
+### Identity Endpoints
+
+```typescript
+// Register new user (call on first login)
+POST /api/identity/register
+Request: {
+  email: string;      // Required
+  firstName: string;  // Required  
+  lastName: string;   // Required
+}
+Response: 200 OK
+
+// Get current user profile
+GET /api/identity/me
+Response: User profile object
+```
+
+### Transaction Endpoints
+
+```typescript
+// List transactions (paginated)
+GET /api/spending/transactions
+Query params:
+  - startDate?: string (ISO datetime)
+  - endDate?: string (ISO datetime)
+  - categoryId?: string (UUID)
+  - type?: 0 | 1 (0=Income, 1=Expense)
+  - pageNumber?: number (default: 1)
+  - pageSize?: number (default: 50, max: 100)
+Response: Paginated list of transactions
+
+// Create transaction
+POST /api/spending/transactions
+Request: {
+  amount: number;       // Required, positive
+  currency: string;     // Required, e.g., "USD"
+  date: string;         // Required, ISO datetime
+  description: string;  // Required
+  categoryId: string;   // Required, UUID
+  type: 0 | 1;          // Required, 0=Income, 1=Expense
+}
+Response: Created transaction
+
+// Update transaction
+PUT /api/spending/transactions/{id}
+Request: Same as create
+Response: 200 OK
+
+// Delete transaction
+DELETE /api/spending/transactions/{id}
+Response: 200 OK (no content)
+```
+
+### Category Endpoints
+
+```typescript
+// List all categories
+GET /api/spending/categories
+Response: Array of categories
+  - Includes system categories (isSystemCategory: true) - read-only
+  - Includes user categories (isSystemCategory: false)
+  - Sorted: system first, then user, alphabetically
+
+// Create custom category
+POST /api/spending/categories
+Request: {
+  name: string;         // Required, unique, not matching system category
+  description?: string; // Optional
+}
+Response: Created category
+```
+
+### Budget Endpoints
+
+```typescript
+// List budgets
+GET /api/budgets
+Query params:
+  - activeOnly?: boolean (default: false)
+  - categoryId?: string (UUID, null for global)
+  - date?: string (ISO datetime, filter budgets active on this date)
+Response: Array of budgets
+
+// Create budget
+POST /api/budgets
+Request: {
+  name: string;             // Required
+  amount: number;           // Required
+  currency: string;         // Required
+  period: 0 | 1 | 2;        // Required, 0=Monthly, 1=Weekly, 2=Custom
+  startDate: string;        // Required, ISO datetime
+  categoryId?: string;      // Optional UUID, null for global budget
+  warningThreshold?: number; // Optional, default: 80 (percentage)
+}
+Response: Created budget
+
+// Update budget
+PUT /api/budgets/{id}
+Request: {
+  name: string;
+  amount: number;
+  period: 0 | 1 | 2;
+  startDate: string;
+  categoryId?: string;
+  warningThreshold: number;
+}
+Response: 200 OK
+
+// Delete budget  
+DELETE /api/budgets/{id}
+Response: 200 OK (no content)
+```
+
+### Analytics Endpoints
+
+```typescript
+// Monthly financial summary
+GET /api/analytics/summary/monthly
+Query params:
+  - year: number (2000-2100)
+  - month: number (1-12)
+Response: {
+  periodStart: string;        // Date
+  periodEnd: string;          // Date
+  totalIncome: number;
+  totalExpense: number;
+  netBalance: number;
+  spendingByCategory: Record<string, number>;
+  incomeByCategory: Record<string, number>;
+}
+```
+
+### Notification Endpoints
+
+```typescript
+// List notifications
+GET /api/notifications
+Query params:
+  - status?: NotificationStatus
+  - type?: NotificationType
+  - unreadOnly?: boolean (default: false)
+  - pageNumber?: number (default: 1)
+  - pageSize?: number (default: 50)
+Response: Paginated list of notifications
+
+// Mark notification as read
+PUT /api/notifications/{id}/read
+Response: 200 OK (no content)
+```
+
+### Enums
+
+```typescript
+// TransactionType
+enum TransactionType {
+  Income = 0,
+  Expense = 1
+}
+
+// BudgetPeriod
+enum BudgetPeriod {
+  Monthly = 0,
+  Weekly = 1,
+  Custom = 2
+}
+
+// NotificationStatus
+enum NotificationStatus {
+  Pending = 0,
+  Read = 1,
+  Dismissed = 2
+}
+
+// NotificationType (examples)
+enum NotificationType {
+  BudgetWarning = 0,
+  BudgetExceeded = 1,
+  // ... other types
+}
+```
+
+---
 
 ## Project Structure
 
 ```
-/
-├── app/                      # Next.js 15 App Router
-│   ├── (auth)/              # Auth group routes
-│   │   ├── login/
-│   │   └── callback/
-│   ├── (dashboard)/         # Protected routes
-│   │   ├── layout.tsx       # Dashboard layout
-│   │   ├── page.tsx         # Dashboard home
+spendbear-frontend/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Auth group (unprotected)
+│   │   ├── login/page.tsx
+│   │   └── callback/page.tsx
+│   ├── (dashboard)/              # Protected routes
+│   │   ├── layout.tsx            # Dashboard shell with nav
+│   │   ├── page.tsx              # Dashboard home
 │   │   ├── transactions/
+│   │   │   ├── page.tsx          # Transaction list
+│   │   │   └── [id]/page.tsx     # Transaction detail
 │   │   ├── budgets/
-│   │   └── settings/
-│   ├── api/                 # API routes (Auth0)
-│   │   └── auth/[...auth0]/
-│   ├── layout.tsx           # Root layout
-│   └── page.tsx             # Landing page
+│   │   │   ├── page.tsx          # Budget list
+│   │   │   └── new/page.tsx      # Create budget
+│   │   └── settings/page.tsx     # User settings
+│   ├── api/
+│   │   └── auth/[...auth0]/route.ts  # Auth0 handler
+│   ├── layout.tsx                # Root layout (providers)
+│   ├── page.tsx                  # Landing page
+│   └── globals.css
 ├── components/
-│   ├── ui/                  # Shadcn/ui components
-│   ├── features/            # Feature-specific components
+│   ├── ui/                       # Base UI (Shadcn/ui + custom)
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   ├── form.tsx
+│   │   ├── select.tsx
+│   │   ├── dialog.tsx
+│   │   ├── progress.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── currency-input.tsx
+│   │   ├── date-picker.tsx
+│   │   └── empty-state.tsx
+│   ├── features/                 # Feature components
 │   │   ├── transactions/
-│   │   │   ├── TransactionForm.tsx
-│   │   │   ├── TransactionList.tsx
-│   │   │   └── QuickAdd.tsx
+│   │   │   ├── transaction-form.tsx
+│   │   │   ├── transaction-list.tsx
+│   │   │   ├── transaction-item.tsx
+│   │   │   └── quick-add-button.tsx
 │   │   ├── budgets/
-│   │   │   ├── BudgetCard.tsx
-│   │   │   └── BudgetProgress.tsx
-│   │   └── dashboard/
-│   │       ├── SpendingChart.tsx
-│   │       └── RecentActivity.tsx
-│   └── shared/              # Shared components
-│       ├── Navigation.tsx
-│       ├── MobileNav.tsx
-│       └── LoadingSpinner.tsx
+│   │   │   ├── budget-form.tsx
+│   │   │   ├── budget-card.tsx
+│   │   │   └── budget-list.tsx
+│   │   ├── dashboard/
+│   │   │   ├── stats-cards.tsx
+│   │   │   ├── spending-chart.tsx
+│   │   │   └── recent-transactions.tsx
+│   │   └── categories/
+│   │       ├── category-select.tsx
+│   │       └── category-form.tsx
+│   └── shared/                   # Layout components
+│       ├── header.tsx
+│       ├── sidebar.tsx
+│       ├── mobile-nav.tsx
+│       ├── user-menu.tsx
+│       └── loading-spinner.tsx
 ├── lib/
-│   ├── api/                 # API client setup
-│   │   ├── client.ts        # Axios instance
-│   │   └── endpoints.ts     # API endpoints
-│   ├── hooks/               # Custom hooks
-│   │   ├── useTransactions.ts
-│   │   ├── useBudgets.ts
-│   │   └── useUser.ts
-│   ├── utils/               # Utility functions
-│   │   ├── formatters.ts    # Currency, date formatting
-│   │   └── validators.ts    # Zod schemas
-│   └── stores/              # Zustand stores
-│       └── app.store.ts
-├── styles/
-│   └── globals.css          # Tailwind imports
-└── types/
-    ├── api.types.ts         # API response types
-    └── app.types.ts         # Application types
+│   ├── api/
+│   │   ├── client.ts             # Axios instance with auth
+│   │   ├── endpoints.ts          # API function wrappers
+│   │   └── types.ts              # API type definitions
+│   ├── hooks/
+│   │   ├── use-transactions.ts
+│   │   ├── use-budgets.ts
+│   │   ├── use-categories.ts
+│   │   ├── use-analytics.ts
+│   │   ├── use-notifications.ts
+│   │   └── use-user.ts
+│   ├── stores/
+│   │   └── app-store.ts          # Zustand store
+│   ├── utils/
+│   │   ├── formatters.ts         # Currency, date, etc.
+│   │   ├── validators.ts         # Zod schemas
+│   │   └── cn.ts                 # Class merge utility
+│   └── providers/
+│       ├── query-provider.tsx    # TanStack Query
+│       └── auth-provider.tsx     # Auth0 wrapper
+├── types/
+│   ├── api.ts                    # API response types
+│   └── app.ts                    # App-specific types
+├── public/
+│   └── images/
+├── .env.local                    # Environment variables
+├── .env.example
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-## MVP Features Implementation
+---
 
-### 1. Authentication Flow
-```typescript
-// Using Auth0 Next.js SDK
-// app/api/auth/[...auth0]/route.ts
-import { handleAuth } from '@auth0/nextjs-auth0';
+## Key Implementation Patterns
 
-export const GET = handleAuth();
-
-// Protected page example
-// app/(dashboard)/layout.tsx
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-
-export default withPageAuthRequired(async function Layout({ children }) {
-  // Layout code
-});
-```
-
-### 2. Quick Transaction Entry
-```typescript
-// Priority: Make it FAST (< 2 taps/clicks)
-// components/features/transactions/QuickAdd.tsx
-- Amount input with number pad UI
-- Recent categories for quick selection
-- Auto-fill today's date
-- Submit → Toast confirmation → Reset form
-```
-
-### 3. Dashboard Overview
-```typescript
-// Real-time updates for critical data
-// app/(dashboard)/page.tsx
-- Current month spending (cached, 5min TTL)
-- Active budget status (real-time)
-- Recent 5 transactions
-- Quick add button (floating on mobile)
-```
-
-### 4. Budget Monitoring
-```typescript
-// Visual indicators for budget health
-// components/features/budgets/BudgetProgress.tsx
-- Progress bar with color coding (green/yellow/red)
-- Remaining amount prominent
-- Days left in period
-- Click for detailed view
-```
-
-## API Integration Pattern
+### API Client Setup
 
 ```typescript
 // lib/api/client.ts
 import axios from 'axios';
-import { getAccessToken } from '@auth0/nextjs-auth0';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7001/api/v1',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5109',
   timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
+// Auth interceptor - add token from Auth0
 apiClient.interceptors.request.use(async (config) => {
-  const { accessToken } = await getAccessToken();
-  config.headers.Authorization = `Bearer ${accessToken}`;
+  // Get token from Auth0 session
+  const token = await getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
+// Error interceptor - handle 401
 apiClient.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response?.status === 401) {
       window.location.href = '/api/auth/login';
     }
     return Promise.reject(error);
   }
 );
+
+export default apiClient;
 ```
 
-## State Management Strategy
+### React Query Hooks Pattern
 
 ```typescript
-// lib/stores/app.store.ts
-import { create } from 'zustand';
-
-interface AppState {
-  // UI State
-  isMobileNavOpen: boolean;
-  activeView: 'dashboard' | 'transactions' | 'budgets';
-  
-  // Cached Data (use React Query for server state)
-  selectedCategory: string | null;
-  dateRange: { start: Date; end: Date };
-  
-  // Actions
-  toggleMobileNav: () => void;
-  setActiveView: (view: string) => void;
-}
-
-// Use React Query for server state
-// lib/hooks/useTransactions.ts
-import { useQuery } from '@tanstack/react-query';
+// lib/hooks/use-transactions.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { transactionApi } from '@/lib/api/endpoints';
 
 export function useTransactions(filters?: TransactionFilters) {
   return useQuery({
     queryKey: ['transactions', filters],
-    queryFn: () => fetchTransactions(filters),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    queryFn: () => transactionApi.list(filters),
+    staleTime: 60 * 1000, // 1 minute
+  });
+}
+
+export function useCreateTransaction() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: transactionApi.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['budgets'] });
+    },
   });
 }
 ```
 
-## UI/UX Guidelines
+### Zod Validation Schemas
 
-### Design Principles
-1. **Speed First** - Optimize for quick data entry
-2. **Mobile Primary** - Touch-friendly, thumb-reachable
-3. **Progressive Disclosure** - Show essential info first
-4. **Instant Feedback** - Loading states, optimistic updates
-5. **Forgiving** - Easy undo, clear error messages
-
-### Component Patterns
 ```typescript
-// Consistent loading states
-<LoadingSpinner size="sm" /> // inline
-<SkeletonCard /> // for cards
-<LoadingOverlay /> // for sections
+// lib/utils/validators.ts
+import { z } from 'zod';
 
-// Consistent error handling
-<ErrorBoundary fallback={<ErrorCard />}>
-  <Component />
-</ErrorBoundary>
-
-// Consistent empty states
-<EmptyState
-  icon={<WalletIcon />}
-  title="No transactions yet"
-  description="Start tracking your expenses"
-  action={<Button>Add Transaction</Button>}
-/>
-```
-
-### Responsive Breakpoints
-```css
-/* Tailwind defaults */
-sm: 640px   /* Mobile landscape */
-md: 768px   /* Tablet */
-lg: 1024px  /* Desktop */
-xl: 1280px  /* Wide desktop */
-```
-
-## Performance Optimization
-
-### Code Splitting
-```typescript
-// Dynamic imports for heavy components
-const ChartComponent = dynamic(() => import('./SpendingChart'), {
-  loading: () => <SkeletonChart />,
-  ssr: false,
+export const transactionSchema = z.object({
+  amount: z.number().positive('Amount must be positive'),
+  currency: z.string().default('USD'),
+  date: z.date().max(new Date(), 'Date cannot be in the future'),
+  description: z.string().min(1, 'Description is required'),
+  categoryId: z.string().uuid('Please select a category'),
+  type: z.number().min(0).max(1),
 });
+
+export const budgetSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(50),
+  amount: z.number().positive('Amount must be positive'),
+  currency: z.string().default('USD'),
+  period: z.number().min(0).max(2),
+  startDate: z.date(),
+  categoryId: z.string().uuid().nullable(),
+  warningThreshold: z.number().min(1).max(100).default(80),
+});
+
+export type TransactionInput = z.infer<typeof transactionSchema>;
+export type BudgetInput = z.infer<typeof budgetSchema>;
 ```
 
-### Data Fetching Strategy
-- **SSG** for landing page
-- **SSR** for initial dashboard load (with cache)
-- **CSR** for interactive features
-- **SWR/React Query** for client-side caching
+### Auth0 Protected Routes
 
-### Bundle Size Management
-```javascript
-// next.config.js
-module.exports = {
-  experimental: {
-    optimizeCss: true,
-  },
-  images: {
-    formats: ['image/avif', 'image/webp'],
-  },
-};
-```
-
-## Testing Strategy
-
-### Unit Tests
 ```typescript
-// __tests__/TransactionForm.test.tsx
-- Form validation
-- Currency formatting
-- Date selection
+// app/(dashboard)/layout.tsx
+import { getSession } from '@auth0/nextjs-auth0';
+import { redirect } from 'next/navigation';
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getSession();
+  
+  if (!session) {
+    redirect('/api/auth/login');
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header user={session.user} />
+      <main>{children}</main>
+      <MobileNav />
+    </div>
+  );
+}
 ```
 
-### Integration Tests
-```typescript
-// __tests__/api/transactions.test.ts
-- API client interceptors
-- Error handling
-- Auth flow
-```
+---
 
-### E2E Tests (Playwright)
-```typescript
-// e2e/add-transaction.spec.ts
-- Complete transaction flow
-- Budget threshold alerts
-- Data persistence
-```
-
-## Environment Configuration
+## Environment Variables
 
 ```bash
-# .env.local (development)
-NEXT_PUBLIC_API_URL=http://localhost:7001/api/v1
-AUTH0_SECRET='use-a-long-random-string'
+# .env.local
+NEXT_PUBLIC_API_URL=http://localhost:5109
+
+# Auth0
+AUTH0_SECRET='[generate-32-char-secret]'
 AUTH0_BASE_URL='http://localhost:3000'
-AUTH0_ISSUER_BASE_URL='https://spendbear.auth0.com'
-AUTH0_CLIENT_ID='your-client-id'
-AUTH0_CLIENT_SECRET='your-client-secret'
+AUTH0_ISSUER_BASE_URL='https://[your-tenant].auth0.com'
+AUTH0_CLIENT_ID='[your-client-id]'
+AUTH0_CLIENT_SECRET='[your-client-secret]'
 AUTH0_AUDIENCE='https://api.spendbear.com'
 AUTH0_SCOPE='openid profile email'
-
-# Analytics (optional for MVP)
-NEXT_PUBLIC_GA_ID='G-XXXXXXXXXX'
 ```
 
-## Development Workflow
+---
 
-### Commands
+## Development Commands
+
 ```bash
-# Development
-npm run dev          # Start dev server
-npm run build        # Build production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run test         # Run tests
-npm run test:e2e     # Run E2E tests
+# Install dependencies
+npm install
 
-# Code quality
-npm run format       # Run Prettier
-npm run type-check   # TypeScript check
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
+npm run lint:fix
+
+# Format code
+npm run format
+
+# Run tests
+npm run test
+npm run test:watch
 ```
 
-### Git Hooks (Husky)
-```json
-// package.json
-{
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run test"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
-  }
-}
-```
+---
 
-## Deployment
+## Component Guidelines
 
-### Vercel Configuration
-```json
-// vercel.json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "regions": ["iad1"],
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
-```
+### Mobile-First Responsive
+- Design for 320px width first
+- Use Tailwind breakpoints: `sm:`, `md:`, `lg:`, `xl:`
+- Touch targets: minimum 44x44px
 
-### Performance Budget
-- **First Load JS**: < 100kB
-- **TTI**: < 3.8s
-- **FCP**: < 1.8s
-- **CLS**: < 0.1
-- **Lighthouse Score**: > 90
+### Loading States
+- Always show skeleton or spinner during data fetch
+- Use `<Suspense>` with loading.tsx where appropriate
+- Optimistic updates for mutations
 
-## Known Constraints
-- **No offline support** in MVP (add PWA later)
-- **No real-time updates** except budget alerts
-- **English only** initially
-- **Desktop-responsive** but mobile-optimized
+### Error Handling
+- Display user-friendly error messages
+- Use toast for transient errors
+- Use inline errors for form validation
+- Fallback UI for component-level errors
 
-## Session Notes
-_Add development notes here_
+### Accessibility
+- All images have alt text
+- Form fields have labels
+- Interactive elements are keyboard accessible
+- Focus management for modals
 
-## Current Focus Areas
-1. Complete Auth0 integration
-2. Build transaction entry form
-3. Create dashboard with spending chart
-4. Implement budget status cards
-5. Add responsive navigation
+---
 
 ## References
-- [Backend API Docs](../docs/api.md) (if exists in parent directory)
-- [Tasks](./tasks.md)
-- [UI Components](./components.md)
-- [Project Setup](./PROJECT_SETUP.md)
-- [Figma Designs](https://figma.com/spendbear-mvp)
+
+- [API OpenAPI Spec](./api/v1.json)
+- [PRD](./PRD.md)
+- [Planning](./PLANNING.md)
+- [Tasks](./TASKS.md)
+- [Auth0 Next.js SDK](https://auth0.com/docs/quickstart/webapp/nextjs)
+- [Shadcn/ui Docs](https://ui.shadcn.com)
+- [TanStack Query Docs](https://tanstack.com/query/latest)
