@@ -75,7 +75,7 @@ export default function Home() {
               <div className="text-4xl mb-4">📊</div>
               <h3 className="text-xl font-semibold mb-2">Smart Budgets</h3>
               <p className="text-muted-foreground">
-                Set budgets by category and get real-time alerts when you're approaching limits.
+                Set budgets by category and get real-time alerts when you&apos;re approaching limits.
               </p>
             </div>
             <div className="bg-card p-6 rounded-lg border">
