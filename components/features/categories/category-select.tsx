@@ -22,6 +22,7 @@ export interface CategorySelectProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  allowClear?: boolean;
 }
 
 /**
@@ -39,6 +40,7 @@ export function CategorySelect({
   placeholder = 'Select category...',
   disabled = false,
   className,
+  allowClear = false,
 }: CategorySelectProps) {
   const [open, setOpen] = React.useState(false);
   const { data: categories, isLoading } = useCategories();
@@ -84,6 +86,16 @@ export function CategorySelect({
             <CommandEmpty>
               {isLoading ? 'Loading categories...' : 'No category found.'}
             </CommandEmpty>
+
+            {/* Clear option */}
+            {allowClear && value && (
+              <CommandGroup>
+                <CommandItem onSelect={() => handleSelect('')}>
+                  <Check className="mr-2 h-4 w-4 opacity-0" />
+                  <span className="text-muted-foreground italic">Clear selection</span>
+                </CommandItem>
+              </CommandGroup>
+            )}
 
             {/* System Categories */}
             {systemCategories.length > 0 && (

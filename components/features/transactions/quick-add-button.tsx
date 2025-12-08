@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Modal } from '@/components/ui/modal';
+import { TransactionFormModal } from './transaction-form-modal';
 
 export interface QuickAddButtonProps {
   variant?: 'fab' | 'button';
@@ -32,45 +32,19 @@ export function QuickAddButton({ variant = 'button', className }: QuickAddButton
           <Plus className="h-6 w-6" />
         </Button>
 
-        <Modal
-          open={open}
-          onOpenChange={setOpen}
-          title="Add Transaction"
-          description="Create a new transaction"
-        >
-          <div className="p-4">
-            <p className="text-muted-foreground">
-              Transaction form will be implemented in Milestone 5
-            </p>
-          </div>
-        </Modal>
+        <TransactionFormModal open={open} onOpenChange={setOpen} />
       </>
     );
   }
 
   return (
     <>
-      <Button
-        size="sm"
-        onClick={() => setOpen(true)}
-        className={className}
-      >
+      <Button size="sm" onClick={() => setOpen(true)} className={className}>
         <Plus className="h-4 w-4 mr-2" />
         <span>Add Transaction</span>
       </Button>
 
-      <Modal
-        open={open}
-        onOpenChange={setOpen}
-        title="Add Transaction"
-        description="Create a new transaction"
-      >
-        <div className="p-4">
-          <p className="text-muted-foreground">
-            Transaction form will be implemented in Milestone 5
-          </p>
-        </div>
-      </Modal>
+      <TransactionFormModal open={open} onOpenChange={setOpen} />
     </>
   );
 }
