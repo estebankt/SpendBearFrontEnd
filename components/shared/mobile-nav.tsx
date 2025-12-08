@@ -13,7 +13,7 @@ export interface MobileNavProps {
 const navItems = [
   {
     title: 'Dashboard',
-    href: '/dashboard',
+    href: '/',
     icon: LayoutDashboard,
   },
   {
