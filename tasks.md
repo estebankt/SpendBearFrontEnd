@@ -12,45 +12,46 @@ This document contains granular tasks organized into milestones for building Spe
 
 ---
 
-## Milestone 0: Project Initialization
-**Goal:** Set up the development environment and project scaffolding  
+## Milestone 0: Project Initialization ✅ COMPLETED
+**Goal:** Set up the development environment and project scaffolding
 **Duration:** 1 day
+**Status:** ✅ Completed (Commits: 4655273, 34c6a43, b971f9c, 5999134)
 
 ### 0.1 Project Setup
-- ⬜ Create Next.js 15 project with TypeScript (`npx create-next-app@latest spendbear-frontend --typescript --tailwind --app --src-dir=false`)
-- ⬜ Configure strict TypeScript settings in `tsconfig.json`
-- ⬜ Set up path aliases (`@/` for root imports)
-- ⬜ Create initial folder structure per CLAUDE.md
-- ⬜ Initialize git repository with `.gitignore`
+- ✅ Create Next.js 15 project with TypeScript (manually configured Next.js 15.5.7)
+- ✅ Configure strict TypeScript settings in `tsconfig.json` (noUncheckedIndexedAccess, noUnusedLocals, etc.)
+- ✅ Set up path aliases (`@/` for root imports)
+- ✅ Create initial folder structure per CLAUDE.md
+- ✅ Initialize git repository with `.gitignore` (updated with IDE/tool patterns)
 
 ### 0.2 Tailwind & Styling Setup
-- ⬜ Configure Tailwind CSS v4
-- ⬜ Set up CSS custom properties (colors, spacing)
-- ⬜ Create `globals.css` with base styles
-- ⬜ Add Inter font via next/font
-- ⬜ Configure dark mode support (class-based, for future)
+- ✅ Configure Tailwind CSS v4 (with @tailwindcss/postcss)
+- ✅ Set up CSS custom properties (colors in HSL format, spacing)
+- ✅ Create `globals.css` with base styles (SpendBear design system)
+- ✅ Add Inter font via @fontsource/inter
+- ✅ Configure dark mode support (class-based, for future)
 
 ### 0.3 Shadcn/ui Installation
-- ⬜ Initialize Shadcn/ui (`npx shadcn@latest init`)
-- ⬜ Install core components: Button, Card, Input, Label
-- ⬜ Install form components: Form, FormField, FormItem, FormMessage
-- ⬜ Install feedback components: Dialog, Sonner (toast)
-- ⬜ Install data components: Select, Progress, Skeleton
-- ⬜ Create `cn()` utility function
+- ✅ Initialize Shadcn/ui with components.json (New York style)
+- ✅ Install core components: Button, Card, Input, Label
+- ✅ Install form components: Dialog, Select (Form component needs manual setup)
+- ✅ Install feedback components: Dialog, Sonner (toast), Dropdown Menu
+- ✅ Install data components: Select, Progress, Skeleton
+- ✅ Create `cn()` utility function in lib/utils/cn.ts
 
 ### 0.4 Development Tooling
-- ⬜ Configure ESLint with Next.js rules
-- ⬜ Set up Prettier with Tailwind plugin
-- ⬜ Create `.prettierrc` and `.eslintrc.json`
-- ⬜ Add lint-staged and husky for pre-commit hooks
-- ⬜ Create `npm run format` and `npm run lint:fix` scripts
+- ✅ Configure ESLint with Next.js rules (eslint.config.mjs)
+- ✅ Set up Prettier with Tailwind plugin (.prettierrc)
+- ✅ Create `.prettierrc` and `eslint.config.mjs`
+- ⬜ Add lint-staged and husky for pre-commit hooks (deferred)
+- ✅ Create `npm run format` and `npm run lint:fix` scripts
 
 ### 0.5 Environment & Documentation
-- ⬜ Create `.env.local.example` with all required variables
-- ⬜ Add environment variable validation (zod or custom)
-- ⬜ Copy documentation files (PRD.md, CLAUDE.md, PLANNING.md, TASKS.md)
-- ⬜ Create README.md with setup instructions
-- ⬜ Verify `npm run dev` starts without errors
+- ✅ Create `.env.local.example` with all required variables (already exists)
+- ⬜ Add environment variable validation (zod or custom) (deferred to Milestone 1)
+- ✅ Copy documentation files (PRD.md, CLAUDE.md, PLANNING.md, TASKS.md, api-v1.json)
+- ⬜ Create README.md with setup instructions (deferred)
+- ✅ Verify `npm run dev` starts without errors
 
 ---
 
