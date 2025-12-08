@@ -61,8 +61,7 @@ export const budgetSchema = z.object({
   warningThreshold: z
     .number()
     .min(1, 'Warning threshold must be at least 1%')
-    .max(100, 'Warning threshold cannot exceed 100%')
-    .default(80),
+    .max(100, 'Warning threshold cannot exceed 100%'),
 });
 
 export type BudgetFormData = z.infer<typeof budgetSchema>;

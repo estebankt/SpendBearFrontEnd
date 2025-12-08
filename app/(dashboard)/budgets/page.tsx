@@ -1,33 +1,35 @@
+'use client';
+
+import * as React from 'react';
 import { PageHeader } from '@/components/ui/page-header';
 import { Button } from '@/components/ui/button';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Plus, Wallet } from 'lucide-react';
+import { BudgetList } from '@/components/features/budgets/budget-list';
+import { BudgetFormModal } from '@/components/features/budgets/budget-form-modal';
+import { Plus } from 'lucide-react';
 
 export default function BudgetsPage() {
+  const [createModalOpen, setCreateModalOpen] = React.useState(false);
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Budgets"
         description="Set and track your spending limits"
         actions={
-          <Button>
+          <Button onClick={() => setCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Create Budget
           </Button>
         }
       />
 
-      <EmptyState
-        icon={Wallet}
-        title="No budgets yet"
-        description="Create your first budget to track spending in specific categories or overall spending."
-        action={{
-          label: 'Create Budget',
-          onClick: () => {
-            // Will be implemented in Milestone 6
-            alert('Budget form will be implemented in Milestone 6');
-          },
-        }}
+      {/* Budget List */}
+      <BudgetList filters={{ activeOnly: true }} />
+
+      {/* Create Budget Modal */}
+      <BudgetFormModal
+        open={createModalOpen}
+        onOpenChange={setCreateModalOpen}
       />
     </div>
   );
