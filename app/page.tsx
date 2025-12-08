@@ -22,7 +22,7 @@ export default function Home() {
               </Button>
             ) : (
               <Button asChild>
-                <Link href="/api/auth/login">Sign In</Link>
+                <Link href="/auth/login">Sign In</Link>
               </Button>
             )}
           </div>
@@ -49,7 +49,7 @@ export default function Home() {
           ) : (
             <>
               <Button size="lg" asChild>
-                <Link href="/api/auth/login">Get Started</Link>
+                <Link href="/auth/login">Get Started</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="#features">Learn More</Link>

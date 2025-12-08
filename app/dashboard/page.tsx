@@ -25,7 +25,7 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
           <p className="text-muted-foreground mb-4">Please sign in to access the dashboard</p>
           <Button asChild>
-            <Link href="/api/auth/login">Sign In</Link>
+            <Link href="/auth/login">Sign In</Link>
           </Button>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function DashboardPage() {
               {user.name || user.email}
             </span>
             <Button variant="outline" asChild>
-              <Link href="/api/auth/logout">Sign Out</Link>
+              <Link href="/auth/logout">Sign Out</Link>
             </Button>
           </div>
         </div>
