@@ -2,12 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Receipt, Wallet, Plus, Settings } from 'lucide-react';
+import { LayoutDashboard, Receipt, Wallet, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
-import { Button } from '@/components/ui/button';
+import { QuickAddButton } from '@/components/features/transactions/quick-add-button';
 
 export interface MobileNavProps {
-  onQuickAdd?: () => void;
   className?: string;
 }
 
@@ -43,7 +42,7 @@ const navItems = [
  * - Active state highlighting
  * - Center FAB for quick add
  */
-export function MobileNav({ onQuickAdd, className }: MobileNavProps) {
+export function MobileNav({ className }: MobileNavProps) {
   const pathname = usePathname();
 
   return (
@@ -78,14 +77,8 @@ export function MobileNav({ onQuickAdd, className }: MobileNavProps) {
         })}
 
         {/* Center FAB */}
-        <div className="flex items-center justify-center">
-          <Button
-            size="icon"
-            className="h-14 w-14 rounded-full shadow-lg -mt-6"
-            onClick={onQuickAdd}
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
+        <div className="flex items-center justify-center -mt-6">
+          <QuickAddButton variant="fab" />
         </div>
 
         {/* Last two nav items */}

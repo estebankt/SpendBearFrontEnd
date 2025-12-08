@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, Plus } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,10 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useUnreadCount } from '@/lib/hooks/use-notifications';
 import { useUser } from '@/lib/hooks/use-user';
-
-export interface HeaderProps {
-  onQuickAdd?: () => void;
-}
+import { QuickAddButton } from '@/components/features/transactions/quick-add-button';
 
 /**
  * Header Component
@@ -28,7 +25,7 @@ export interface HeaderProps {
  * - Notification bell with count
  * - Quick add button
  */
-export function Header({ onQuickAdd }: HeaderProps) {
+export function Header() {
   const { user, isLoading } = useUser();
   const { count: unreadCount } = useUnreadCount();
 
@@ -66,14 +63,9 @@ export function Header({ onQuickAdd }: HeaderProps) {
         {/* Right side actions */}
         <div className="flex items-center gap-2">
           {/* Quick Add Button */}
-          <Button
-            size="sm"
-            onClick={onQuickAdd}
-            className="hidden sm:flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            <span>Add Transaction</span>
-          </Button>
+          <div className="hidden sm:block">
+            <QuickAddButton variant="button" />
+          </div>
 
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative" asChild>
