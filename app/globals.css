@@ -1,58 +1,68 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  /* Primary - Bear Brown #8B4513 */
-  --primary: 25 59% 31%;
-  --primary-foreground: 0 0% 100%;
+@theme {
+  /* Design Tokens */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Accent - Honey Gold #F4A460 */
-  --accent: 28 87% 67%;
-  --accent-foreground: 0 0% 10%;
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
 
-  /* Success - Forest Green #22C55E */
-  --success: 142 71% 45%;
+  /* Colors - Using HSL format for Tailwind v4 */
+  /* Primary - Bear Brown */
+  --color-primary: oklch(43% 0.08 42);
+  --color-primary-foreground: oklch(100% 0 0);
 
-  /* Warning - Amber #F59E0B */
-  --warning: 38 92% 50%;
+  /* Secondary/Accent - Honey Gold */
+  --color-secondary: oklch(77% 0.12 70);
+  --color-secondary-foreground: oklch(20% 0 0);
+  --color-accent: oklch(77% 0.12 70);
+  --color-accent-foreground: oklch(20% 0 0);
 
-  /* Danger - Berry Red #EF4444 */
-  --danger: 0 84% 60%;
+  /* Destructive - Red */
+  --color-destructive: oklch(63% 0.23 25);
+  --color-destructive-foreground: oklch(100% 0 0);
 
-  /* Neutral */
-  --background: 60 9% 98%;
-  --foreground: 0 0% 10%;
-  --muted: 0 0% 96%;
-  --muted-foreground: 0 0% 45%;
-  --border: 0 0% 90%;
+  /* Muted */
+  --color-muted: oklch(96% 0 0);
+  --color-muted-foreground: oklch(55% 0 0);
 
   /* Card */
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 10%;
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(20% 0 0);
 
   /* Popover */
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(20% 0 0);
 
-  /* Input */
-  --input: 0 0% 90%;
-  --ring: 25 59% 31%;
+  /* Border */
+  --color-border: oklch(90% 0 0);
+  --color-input: oklch(90% 0 0);
+  --color-ring: oklch(43% 0.08 42);
 
-  /* Radius */
-  --radius: 0.5rem;
+  /* Background */
+  --color-background: oklch(98% 0 0);
+  --color-foreground: oklch(20% 0 0);
+
+  /* Status Colors */
+  --color-success: oklch(65% 0.2 145);
+  --color-warning: oklch(75% 0.18 75);
+  --color-error: oklch(63% 0.23 25);
 }
 
+/* Base Styles */
 * {
-  border-color: hsl(var(--border));
+  @apply border-border;
 }
 
 body {
-  color: hsl(var(--foreground));
-  background: hsl(var(--background));
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-background text-foreground font-sans antialiased;
 }
 
+/* Utility Classes */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
