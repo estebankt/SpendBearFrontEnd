@@ -3,21 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --background: #fafaf9;
-  --foreground: #1a1a1a;
-}
+  /* Primary - Bear Brown #8B4513 */
+  --primary: 25 59% 31%;
+  --primary-foreground: 0 0% 100%;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Accent - Honey Gold #F4A460 */
+  --accent: 28 87% 67%;
+  --accent-foreground: 0 0% 10%;
+
+  /* Success - Forest Green #22C55E */
+  --success: 142 71% 45%;
+
+  /* Warning - Amber #F59E0B */
+  --warning: 38 92% 50%;
+
+  /* Danger - Berry Red #EF4444 */
+  --danger: 0 84% 60%;
+
+  /* Neutral */
+  --background: 60 9% 98%;
+  --foreground: 0 0% 10%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --border: 0 0% 90%;
+
+  /* Card */
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+
+  /* Popover */
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+
+  /* Input */
+  --input: 0 0% 90%;
+  --ring: 25 59% 31%;
+
+  /* Radius */
+  --radius: 0.5rem;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 @layer utilities {
