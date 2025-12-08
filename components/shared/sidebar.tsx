@@ -21,7 +21,7 @@ export interface SidebarProps {
 const navItems = [
   {
     title: 'Dashboard',
-    href: '/',
+    href: '/dashboard',
     icon: LayoutDashboard,
   },
   {
