@@ -280,35 +280,37 @@ This document contains granular tasks organized into milestones for building Spe
 
 ---
 
-## Milestone 4: Dashboard Layout & Shell
-**Goal:** Create the main dashboard structure and navigation  
+## Milestone 4: Dashboard Layout & Shell ✅ COMPLETED
+**Goal:** Create the main dashboard structure and navigation
 **Duration:** 1 day
+**Status:** ✅ Completed (Commit: b4d23a3)
 
 ### 4.1 Dashboard Layout
-- ⬜ Create `app/(dashboard)/layout.tsx`
-- ⬜ Add session check (redirect if not authenticated)
-- ⬜ Implement responsive layout structure
-- ⬜ Desktop: sidebar + main content
-- ⬜ Mobile: header + content + bottom nav
-- ⬜ Add padding and max-width constraints
+- ✅ Create `app/(dashboard)/layout.tsx`
+- ✅ Add session check (redirect if not authenticated)
+- ✅ Implement responsive layout structure
+- ✅ Desktop: sidebar + main content
+- ✅ Mobile: header + content + bottom nav
+- ✅ Add padding and max-width constraints
 
 ### 4.2 Navigation Implementation
-- ⬜ Wire up Header component with user data
-- ⬜ Wire up Sidebar with route links
-- ⬜ Wire up MobileNav with route links
-- ⬜ Implement active route highlighting
-- ⬜ Add navigation links: Dashboard, Transactions, Budgets, Settings
+- ✅ Wire up Header component with user data
+- ✅ Wire up Sidebar with route links
+- ✅ Wire up MobileNav with route links
+- ✅ Implement active route highlighting
+- ✅ Add navigation links: Dashboard, Transactions, Budgets, Settings, Notifications
 
 ### 4.3 Quick Add Button Integration
-- ⬜ Create `components/features/transactions/quick-add-button.tsx`
-- ⬜ FAB style for mobile (fixed position)
-- ⬜ Header button for desktop
-- ⬜ Open transaction form modal on click
+- ✅ Create `components/features/transactions/quick-add-button.tsx`
+- ✅ FAB style for mobile (fixed position)
+- ✅ Header button for desktop
+- ✅ Open transaction form modal on click (placeholder for Milestone 5)
 
-### 4.4 Global Providers
-- ⬜ Verify all providers in root layout (Query, Auth, Toast)
-- ⬜ Add error boundary at layout level
-- ⬜ Add loading state for initial auth check
+### 4.4 Global Providers & Error Handling
+- ✅ Verify all providers in root layout (Query, Auth, Toast)
+- ✅ Add error boundary at layout level (error.tsx)
+- ✅ Add loading state for async operations (loading.tsx)
+- ✅ Created placeholder pages: Dashboard, Transactions, Budgets, Settings, Notifications
 
 ---
 
