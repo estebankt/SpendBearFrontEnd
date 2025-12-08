@@ -43,19 +43,14 @@
   --radius: 0.5rem;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+* {
+  border-color: hsl(var(--border));
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 @layer utilities {
