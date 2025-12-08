@@ -18,17 +18,17 @@ const navItems = [
   },
   {
     title: 'Transactions',
-    href: '/dashboard/transactions',
+    href: '/transactions',
     icon: Receipt,
   },
   {
     title: 'Budgets',
-    href: '/dashboard/budgets',
+    href: '/budgets',
     icon: Wallet,
   },
   {
     title: 'Settings',
-    href: '/dashboard/settings',
+    href: '/settings',
     icon: Settings,
   },
 ];
