@@ -4,6 +4,7 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import './globals.css';
+import { UserProvider } from '@/lib/providers/user-provider';
 
 export const metadata: Metadata = {
   title: 'SpendBear - Personal Finance Tracker',
@@ -17,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <UserProvider>{children}</UserProvider>
+      </body>
     </html>
   );
 }

@@ -12,6 +12,7 @@
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,js,jsx}\""
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^4.13.2",
     "@fontsource/inter": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-dialog": "^1.1.15",
