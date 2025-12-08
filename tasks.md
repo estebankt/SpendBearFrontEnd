@@ -111,79 +111,82 @@ This document contains granular tasks organized into milestones for building Spe
 
 ---
 
-## Milestone 2: API Client & Core Hooks
-**Goal:** Set up API communication layer and data fetching hooks  
+## Milestone 2: API Client & Core Hooks ✅ COMPLETED
+**Goal:** Set up API communication layer and data fetching hooks
 **Duration:** 2 days
+**Status:** ✅ Completed (Commit: 06e067a)
 
 ### 2.1 Axios Client Setup
-- ⬜ Install `axios`
-- ⬜ Create `lib/api/client.ts` with base configuration
-- ⬜ Set baseURL from environment variable
-- ⬜ Configure request timeout (10s)
-- ⬜ Add request interceptor for Auth0 token injection
+- ✅ Install `axios`
+- ✅ Create `lib/api/client.ts` with base configuration
+- ✅ Set baseURL from environment variable
+- ✅ Configure request timeout (10s)
+- ✅ Add request interceptor for Auth0 token injection
 
 ### 2.2 Auth Token Integration
-- ⬜ Create `lib/api/get-token.ts` for server-side token retrieval
-- ⬜ Create client-side token fetching (if needed)
-- ⬜ Add Authorization header to all requests
-- ⬜ Handle 401 responses (redirect to login)
-- ⬜ Add response error interceptor
+- ✅ Create `app/api/auth/token/route.ts` for client-side token retrieval
+- ✅ Create client-side token fetching via API route
+- ✅ Add Authorization header to all requests
+- ✅ Handle 401 responses (redirect to login)
+- ✅ Add response error interceptor
 
 ### 2.3 API Type Definitions
-- ⬜ Create `types/api.ts` with all API response types
-- ⬜ Define Transaction type
-- ⬜ Define Budget type
-- ⬜ Define Category type
-- ⬜ Define MonthlySummary type
-- ⬜ Define Notification type
-- ⬜ Define paginated response wrapper type
-- ⬜ Define API error response type
+- ✅ Create `types/api.ts` with all API response types
+- ✅ Define Transaction type
+- ✅ Define Budget type
+- ✅ Define Category type
+- ✅ Define MonthlySummary type
+- ✅ Define Notification type
+- ✅ Define paginated response wrapper type
+- ✅ Define API error response type
 
 ### 2.4 API Endpoint Functions
-- ⬜ Create `lib/api/endpoints.ts`
-- ⬜ Implement `transactionApi` (list, create, update, delete)
-- ⬜ Implement `budgetApi` (list, create, update, delete)
-- ⬜ Implement `categoryApi` (list, create)
-- ⬜ Implement `analyticsApi` (monthlySummary)
-- ⬜ Implement `notificationApi` (list, markRead)
-- ⬜ Implement `identityApi` (me, register)
+- ✅ Create `lib/api/endpoints.ts`
+- ✅ Implement `transactionApi` (list, create, update, delete)
+- ✅ Implement `budgetApi` (list, create, update, delete)
+- ✅ Implement `categoryApi` (list, create)
+- ✅ Implement `analyticsApi` (monthlySummary)
+- ✅ Implement `notificationApi` (list, markRead)
+- ✅ Implement `identityApi` (me, register)
 
 ### 2.5 TanStack Query Setup
-- ⬜ Install `@tanstack/react-query`
-- ⬜ Create `lib/providers/query-provider.tsx`
-- ⬜ Configure QueryClient with default options
-- ⬜ Set default stale times and cache times
-- ⬜ Add QueryClientProvider to root layout
-- ⬜ Install React Query DevTools (dev only)
+- ✅ Install `@tanstack/react-query`
+- ✅ Create `lib/providers/query-provider.tsx`
+- ✅ Configure QueryClient with default options
+- ✅ Set default stale times and cache times
+- ✅ Add QueryClientProvider to root layout
+- ✅ Install React Query DevTools (dev only)
 
 ### 2.6 Data Fetching Hooks
-- ⬜ Create `lib/hooks/use-transactions.ts`
-  - ⬜ `useTransactions(filters)` - list query
-  - ⬜ `useCreateTransaction()` - mutation
-  - ⬜ `useUpdateTransaction()` - mutation
-  - ⬜ `useDeleteTransaction()` - mutation
-- ⬜ Create `lib/hooks/use-budgets.ts`
-  - ⬜ `useBudgets(filters)` - list query
-  - ⬜ `useActiveBudgets()` - active only query
-  - ⬜ `useCreateBudget()` - mutation
-  - ⬜ `useUpdateBudget()` - mutation
-  - ⬜ `useDeleteBudget()` - mutation
-- ⬜ Create `lib/hooks/use-categories.ts`
-  - ⬜ `useCategories()` - list query
-  - ⬜ `useCreateCategory()` - mutation
-- ⬜ Create `lib/hooks/use-analytics.ts`
-  - ⬜ `useMonthlySummary(year, month)` - query
-- ⬜ Create `lib/hooks/use-notifications.ts`
-  - ⬜ `useNotifications(filters)` - list query
-  - ⬜ `useUnreadCount()` - query
-  - ⬜ `useMarkNotificationRead()` - mutation
+- ✅ Create `lib/hooks/use-transactions.ts`
+  - ✅ `useTransactions(filters)` - list query
+  - ✅ `useCreateTransaction()` - mutation
+  - ✅ `useUpdateTransaction()` - mutation
+  - ✅ `useDeleteTransaction()` - mutation
+- ✅ Create `lib/hooks/use-budgets.ts`
+  - ✅ `useBudgets(filters)` - list query
+  - ✅ `useActiveBudgets()` - active only query
+  - ✅ `useCreateBudget()` - mutation
+  - ✅ `useUpdateBudget()` - mutation
+  - ✅ `useDeleteBudget()` - mutation
+- ✅ Create `lib/hooks/use-categories.ts`
+  - ✅ `useCategories()` - list query
+  - ✅ `useCreateCategory()` - mutation
+- ✅ Create `lib/hooks/use-analytics.ts`
+  - ✅ `useMonthlySummary(year, month)` - query
+  - ✅ `useCurrentMonthlySummary()` - helper
+  - ✅ `usePreviousMonthlySummary()` - helper
+- ✅ Create `lib/hooks/use-notifications.ts`
+  - ✅ `useNotifications(filters)` - list query
+  - ✅ `useUnreadCount()` - query
+  - ✅ `useMarkNotificationRead()` - mutation
 
 ### 2.7 Cache Invalidation Logic
-- ⬜ Configure transaction mutations to invalidate analytics
-- ⬜ Configure transaction mutations to invalidate budgets
-- ⬜ Configure budget mutations to invalidate budget list
-- ⬜ Add optimistic updates for transaction creation
-- ⬜ Add rollback on mutation errors
+- ✅ Configure transaction mutations to invalidate analytics
+- ✅ Configure transaction mutations to invalidate budgets
+- ✅ Configure budget mutations to invalidate budget list
+- ✅ Add optimistic updates for transaction creation
+- ✅ Add rollback on mutation errors
 
 ---
 
