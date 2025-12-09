@@ -18,7 +18,9 @@ export async function GET() {
       );
     }
 
-    const accessToken = session.accessToken;
+    // Use ID token instead of access token since access token is encrypted (JWE)
+    // ID token is a readable JWT that the backend can validate
+    const accessToken = session.tokenSet?.idToken;
 
     if (!accessToken) {
       return NextResponse.json(
