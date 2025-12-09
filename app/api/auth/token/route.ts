@@ -9,18 +9,7 @@ import { auth0 } from '@/lib/auth0';
  */
 export async function GET() {
   try {
-    const session = await auth0.getSession();
-
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
-    }
-
-    // Use ID token instead of access token since access token is encrypted (JWE)
-    // ID token is a readable JWT that the backend can validate
-    const accessToken = session.tokenSet?.idToken;
+    const { accessToken } = await auth0.getAccessToken();
 
     if (!accessToken) {
       return NextResponse.json(
