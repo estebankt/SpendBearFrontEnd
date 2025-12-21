@@ -13,7 +13,7 @@ SpendBear Frontend is a Next.js 15 application providing a clean, fast interface
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16 (App Router) |
 | Language | TypeScript (strict mode) |
 | Styling | Tailwind CSS v4 + Shadcn/ui |
 | State | Zustand (UI) + TanStack Query (server) |
@@ -417,7 +417,7 @@ npm run test:watch
 
 ## References
 
-- [API OpenAPI Spec](./api-v1.json)
+- [API OpenAPI Spec](./api.json)
 - [PRD](./PRD.md)
 - [Planning](./PLANNING.md)
 - [Tasks](./TASKS.md)
