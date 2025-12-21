@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SpendBear - Register</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a6e22e","primary-hover": "#8acb18",
+                        "secondary": "#66d9ef","accent": "#f92672","background-light": "#3e3d32",
+                        "background-dark": "#272822","surface-dark": "#383830","border-dark": "#49483e",
+                        "text-primary": "#f8f8f2",
+                        "text-secondary": "#75715e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: radial-gradient(circle at 50% 0%, rgba(166, 226, 46, 0.15) 0%, #272822 60%);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-text-primary min-h-screen flex flex-col items-center justify-center p-4 gradient-bg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+<div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px]"></div>
+</div>
+<nav class="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20 max-w-7xl mx-auto px-6 lg:px-8">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-xl font-bold">savings</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white">SpendBear</span>
+</div>
+<div class="flex items-center gap-4">
+<a class="text-sm font-medium text-white/70 hover:text-white transition-colors" href="#">Log In</a>
+<div class="w-8 h-8 rounded-full bg-surface-dark border border-border-dark flex items-center justify-center text-text-secondary">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+</div>
+</nav>
+<div class="relative w-full max-w-[480px] bg-surface-dark/80 backdrop-blur-xl border border-border-dark rounded-2xl shadow-2xl z-10 flex flex-col overflow-hidden mt-12">
+<div class="px-8 pt-10 pb-6 text-center">
+<h1 class="text-white tracking-tight text-[28px] font-bold leading-tight mb-2">Create an account</h1>
+<p class="text-white/60 text-base font-normal leading-normal">Start managing your budget with SpendBear.</p>
+</div>
+<div class="px-8 pb-10 flex flex-col gap-5">
+<label class="flex flex-col w-full">
+<p class="text-white/80 text-sm font-medium leading-normal pb-2 ml-1">Full Name</p>
+<input class="flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-border-dark bg-[#272822] focus:border-primary h-11 placeholder:text-white/30 px-4 text-sm font-normal leading-normal transition-all duration-200" placeholder="John Doe" type="text"/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-white/80 text-sm font-medium leading-normal pb-2 ml-1">Email Address</p>
+<input class="flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-border-dark bg-[#272822] focus:border-primary h-11 placeholder:text-white/30 px-4 text-sm font-normal leading-normal transition-all duration-200" placeholder="john@example.com" type="email"/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-white/80 text-sm font-medium leading-normal pb-2 ml-1">Password</p>
+<div class="flex w-full items-stretch rounded-lg relative">
+<input class="flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-border-dark bg-[#272822] focus:border-primary h-11 placeholder:text-white/30 pl-4 pr-12 text-sm font-normal leading-normal transition-all duration-200" placeholder="••••••••" type="password"/>
+<div class="absolute right-0 top-0 bottom-0 flex items-center justify-center px-3 cursor-pointer text-white/40 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</div>
+</div>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-white/80 text-sm font-medium leading-normal pb-2 ml-1">Confirm Password</p>
+<div class="flex w-full items-stretch rounded-lg relative">
+<input class="flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-border-dark bg-[#272822] focus:border-primary h-11 placeholder:text-white/30 pl-4 pr-12 text-sm font-normal leading-normal transition-all duration-200" placeholder="••••••••" type="password"/>
+<div class="absolute right-0 top-0 bottom-0 flex items-center justify-center px-3 cursor-pointer text-white/40 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</div>
+</div>
+</label>
+<div class="flex items-center gap-3 pt-1 ml-1">
+<input class="h-4 w-4 rounded border-border-dark bg-[#272822] text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-sm text-white/60">I agree to the <a class="text-primary hover:text-primary-hover transition-colors underline decoration-primary/30" href="#">Terms of Service</a></span>
+</div>
+<button class="mt-2 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 px-5 bg-primary hover:bg-primary-hover text-[#272822] text-sm font-bold leading-normal tracking-wide transition-all duration-200 shadow-lg shadow-primary/10">
+<span class="truncate">Create Account</span>
+</button>
+<div class="flex items-center gap-4 py-1">
+<div class="h-px flex-1 bg-border-dark"></div>
+<p class="text-xs font-medium text-white/40 uppercase tracking-wider">Or continue with</p>
+<div class="h-px flex-1 bg-border-dark"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 rounded-lg border border-border-dark bg-[#272822] hover:bg-[#3e3d32] h-10 transition-colors duration-200">
+<img alt="Google" class="w-4 h-4" data-alt="Google Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXhKdc3AarlaXSKixwrh4PGtEd-55_dxLjX5Dn8OI2_Ll77-Jz6-1x3_56Ncb25Dl6oIq-E5x9YblEq3wol8OSwW3OwlkT8dkd_KgjQAry1CK9mi9AY1sWpIvtWXPlmL-SyXcIYcGf8UE0jSVhJRsBYg3zTfQ1KWfQoT-dLfpwvh57BPMtCJ7oq5x9N3VooGVGgCTfuqP8H_qx_uqKsfiaiLpi1l-WJHgirLPZyCZ9ZrWovAzx9MszcsUlrHWrFKx_f8x25pT5NmE"/>
+<span class="text-white/90 text-sm font-medium">Google</span>
+</button>
+<button class="flex items-center justify-center gap-2 rounded-lg border border-border-dark bg-[#272822] hover:bg-[#3e3d32] h-10 transition-colors duration-200">
+<span class="material-symbols-outlined text-white text-[18px]">ios</span>
+<span class="text-white/90 text-sm font-medium">Apple</span>
+</button>
+</div>
+<div class="text-center pt-1">
+<p class="text-sm text-white/60">
+                    Already have an account? 
+                    <a class="text-primary font-medium hover:text-primary-hover transition-colors" href="#">Log In</a>
+</p>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 text-center z-10">
+<div class="flex items-center justify-center gap-6 text-xs text-white/40 font-medium mb-2">
+<a class="hover:text-white transition-colors" href="#">Privacy</a>
+<a class="hover:text-white transition-colors" href="#">Terms</a>
+<a class="hover:text-white transition-colors" href="#">Contact</a>
+</div>
+<p class="text-xs text-white/20">© 2024 SpendBear Inc.</p>
+</div>
+
+</body></html>

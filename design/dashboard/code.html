@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SpendBear Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Monokai Classic Palette
+                        "monokai-bg": "#272822",
+                        "monokai-fg": "#F8F8F2",
+                        "monokai-pink": "#F92672",
+                        "monokai-green": "#A6E22E",
+                        "monokai-yellow": "#E6DB74",
+                        "monokai-orange": "#FD971F",
+                        "monokai-purple": "#AE81FF",
+                        "monokai-blue": "#66D9EF",
+                        "monokai-gray": "#75715E",
+                        "monokai-dark": "#1E1F1C", // Darker background for sidebars/panels
+                        // Semantic mapping
+                        "primary": "#AE81FF", // Purple
+                        "primary-hover": "#9666E6", 
+                        "background-dark": "#272822", 
+                        "surface-dark": "#3E3D32", 
+                        "surface-dark-highlight": "#49483E",
+                        "border-color": "#75715E",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(174, 129, 255, 0.3)',
+                        'glow-pink': '0 0 15px rgba(249, 38, 114, 0.3)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #272822;
+            color: #F8F8F2;
+            min-height: 100vh;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E1F1C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #75715E;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #AE81FF;
+        }
+        .glass-panel {
+            background: #2D2E28;border: 1px solid #49483E;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .glass-sidebar {
+             background: #1E1F1C;
+             border-right: 1px solid #49483E;
+        }
+        .animate-enter {
+            animation: enter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes enter {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .nav-item-active {
+            background: #3E3D32;
+            color: #F92672;border-left: 3px solid #F92672;
+        }
+        .nav-item-active .material-symbols-outlined {
+            color: #F92672;
+        }
+    </style>
+</head>
+<body class="font-display antialiased selection:bg-monokai-purple selection:text-white">
+<div class="flex h-screen w-full overflow-hidden relative">
+<div class="fixed top-[-20%] left-[-10%] w-[40vw] h-[40vw] bg-monokai-purple/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-monokai-pink/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<aside class="w-72 flex-shrink-0 glass-sidebar hidden lg:flex flex-col h-full z-30 relative shadow-xl">
+<div class="p-8 pb-4">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="flex h-11 w-11 items-center justify-center rounded-xl bg-monokai-yellow text-monokai-dark shadow-lg group-hover:scale-110 transition-transform duration-300 ease-spring">
+<span class="material-symbols-outlined icon-filled text-[26px]">pets</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-monokai-fg leading-none group-hover:text-monokai-yellow transition-colors">SpendBear</h1>
+<span class="text-[11px] font-medium text-monokai-gray uppercase tracking-wider mt-0.5 block">Finance Tracker</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-5 space-y-2 overflow-y-auto mt-6">
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-r-xl rounded-l-sm nav-item-active group transition-all duration-300 relative overflow-hidden" href="#">
+<span class="material-symbols-outlined icon-filled group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-sm font-semibold tracking-wide">Dashboard</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-r-xl rounded-l-sm text-monokai-fg/70 hover:text-monokai-fg hover:bg-white/5 transition-all duration-200 group relative overflow-hidden" href="#">
+<span class="material-symbols-outlined group-hover:text-monokai-blue transition-colors group-hover:scale-110 duration-300">receipt_long</span>
+<span class="text-sm font-medium z-10 relative">Transactions</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-r-xl rounded-l-sm text-monokai-fg/70 hover:text-monokai-fg hover:bg-white/5 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-monokai-yellow transition-colors group-hover:scale-110 duration-300">savings</span>
+<span class="text-sm font-medium">Budget</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-r-xl rounded-l-sm text-monokai-fg/70 hover:text-monokai-fg hover:bg-white/5 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-monokai-green transition-colors group-hover:scale-110 duration-300">bar_chart</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-r-xl rounded-l-sm text-monokai-fg/70 hover:text-monokai-fg hover:bg-white/5 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-monokai-orange transition-colors group-hover:scale-110 duration-300">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-5 border-t border-monokai-gray/20">
+<div class="bg-monokai-bg p-3 rounded-xl border border-monokai-gray/20 hover:border-monokai-purple/50 hover:bg-monokai-bg/80 transition-all group cursor-pointer shadow-sm">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-monokai-purple/20 overflow-hidden flex items-center justify-center ring-2 ring-monokai-purple/30">
+<img alt="User Avatar" class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyLZ6sB6SAH_kwAPzOzEIqDw6R5eKImh4JgiSc0vuQxDbcVtdMaa-34D9rZYHPZHJIiyDdbMRwE5YRDhqWt5jfEgp9BTrfNtpiIWa6j5NXK4zxywza7O8_QyXRY8NRozxjJSYrHmvVsTvU3Tp36qrKQzXoyByDpDxhc5cdPAmHWv7WnZAWMOXOxagMF9131IzZW7wMPP7xVJMXTw5a1soKrwIyXhB1zT2bQ69lPG8cErYWME1v7mzCZGTywCFQblMOomh9l01b5VY"/>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-monokai-fg group-hover:text-monokai-purple transition-colors">Alex Morgan</p>
+<p class="text-xs text-monokai-gray group-hover:text-monokai-fg/70">Pro Member</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 h-full overflow-y-auto relative scroll-smooth z-10 bg-monokai-bg">
+<div class="p-6 md:p-10 max-w-7xl mx-auto space-y-10 relative z-10">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-enter">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h2 class="text-3xl font-bold tracking-tight text-monokai-fg">Hi, Alex</h2>
+<span class="material-symbols-outlined text-monokai-yellow text-3xl animate-[bounce_2s_infinite]">waving_hand</span>
+</div>
+<p class="text-monokai-gray text-base font-medium">Your financial hibernation plan is on track.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="hidden md:flex items-center justify-center h-11 w-11 rounded-xl glass-panel text-monokai-gray hover:text-monokai-fg hover:border-monokai-fg/30 transition-all duration-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center gap-3 h-11 px-4 rounded-xl glass-panel text-sm font-semibold text-monokai-fg shadow-sm hover:border-monokai-purple/50 hover:text-monokai-purple transition-all duration-300 group">
+<span class="material-symbols-outlined text-[20px] text-monokai-purple group-hover:text-monokai-purple">calendar_today</span>
+<span>Oct 1 - Oct 31</span>
+<span class="material-symbols-outlined text-[20px] text-monokai-gray group-hover:text-monokai-purple transition-colors">expand_more</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-enter delay-100">
+<div class="glass-panel p-6 rounded-2xl hover:border-monokai-green/40 transition-all duration-300 relative overflow-hidden group hover:-translate-y-1 cursor-default">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="p-2.5 rounded-xl bg-monokai-bg border border-monokai-gray/20 text-monokai-green">
+<span class="material-symbols-outlined text-2xl">account_balance</span>
+</div>
+<span class="inline-flex items-center text-xs font-bold text-monokai-green bg-monokai-green/10 px-2.5 py-1 rounded-lg border border-monokai-green/20">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                                +2.5%
+                            </span>
+</div>
+<div class="relative z-10">
+<p class="text-xs font-bold uppercase tracking-wider text-monokai-gray mb-1">Net Worth</p>
+<h3 class="text-3xl font-bold tracking-tight text-monokai-fg">$142,500</h3>
+</div>
+<div class="mt-5 relative z-10">
+<div class="flex justify-between text-[11px] font-medium text-monokai-gray mb-2">
+<span>Progress</span>
+<span class="text-monokai-green">75%</span>
+</div>
+<div class="h-1.5 w-full bg-monokai-bg rounded-full overflow-hidden">
+<div class="h-full bg-monokai-green w-[75%] rounded-full shadow-[0_0_10px_rgba(166,226,46,0.3)] group-hover:w-[78%] transition-all duration-1000 ease-out"></div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl hover:border-monokai-pink/40 transition-all duration-300 relative overflow-hidden group hover:-translate-y-1 cursor-default">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="p-2.5 rounded-xl bg-monokai-bg border border-monokai-gray/20 text-monokai-pink">
+<span class="material-symbols-outlined text-2xl">shopping_bag</span>
+</div>
+<span class="inline-flex items-center text-xs font-bold text-monokai-pink bg-monokai-pink/10 px-2.5 py-1 rounded-lg border border-monokai-pink/20">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                                +1.2%
+                            </span>
+</div>
+<div class="relative z-10">
+<p class="text-xs font-bold uppercase tracking-wider text-monokai-gray mb-1">Total Spent</p>
+<h3 class="text-3xl font-bold tracking-tight text-monokai-fg">$3,240</h3>
+</div>
+<div class="mt-5 relative z-10">
+<div class="flex justify-between text-[11px] font-medium text-monokai-gray mb-2">
+<span>Budget used</span>
+<span class="text-monokai-pink">45%</span>
+</div>
+<div class="h-1.5 w-full bg-monokai-bg rounded-full overflow-hidden">
+<div class="h-full bg-monokai-pink w-[45%] rounded-full shadow-[0_0_10px_rgba(249,38,114,0.3)] group-hover:w-[48%] transition-all duration-1000 ease-out"></div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl hover:border-monokai-yellow/40 transition-all duration-300 relative overflow-hidden group hover:-translate-y-1 cursor-default">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="p-2.5 rounded-xl bg-monokai-bg border border-monokai-gray/20 text-monokai-yellow">
+<span class="material-symbols-outlined text-2xl">hive</span>
+</div>
+<span class="inline-flex items-center text-xs font-bold text-monokai-green bg-monokai-green/10 px-2.5 py-1 rounded-lg border border-monokai-green/20">
+<span class="material-symbols-outlined text-[14px] mr-1">arrow_upward</span>
+                                +0.5%
+                            </span>
+</div>
+<div class="relative z-10">
+<p class="text-xs font-bold uppercase tracking-wider text-monokai-gray mb-1">Honey Pot (Savings)</p>
+<h3 class="text-3xl font-bold tracking-tight text-monokai-fg">18%</h3>
+</div>
+<div class="mt-5 relative z-10">
+<div class="flex justify-between text-[11px] font-medium text-monokai-gray mb-2">
+<span>Yield</span>
+<span class="text-monokai-yellow">Stable</span>
+</div>
+<div class="h-1.5 w-full bg-monokai-bg rounded-full overflow-hidden">
+<div class="h-full bg-monokai-yellow w-[18%] rounded-full shadow-[0_0_10px_rgba(230,219,116,0.3)] group-hover:w-[22%] transition-all duration-1000 ease-out"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-enter delay-200">
+<div class="lg:col-span-2 space-y-8">
+<div class="glass-panel rounded-2xl p-8 relative overflow-hidden">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div>
+<h3 class="text-lg font-bold text-monokai-fg flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-monokai-purple/10 flex items-center justify-center text-monokai-purple">
+<span class="material-symbols-outlined text-sm">show_chart</span>
+</div>
+                                        Cash Flow
+                                    </h3>
+<p class="text-sm text-monokai-gray mt-1 ml-11">Income vs Expenses over time</p>
+</div>
+<div class="text-right">
+<p class="text-2xl font-bold text-monokai-fg tracking-tight">$4,500</p>
+<p class="text-xs font-bold text-monokai-green uppercase tracking-wide bg-monokai-green/10 px-2 py-1 rounded-md inline-block border border-monokai-green/20 mt-1">Net Positive</p>
+</div>
+</div>
+<div class="h-64 w-full flex items-end justify-between gap-4 px-2">
+<div class="flex flex-col items-center gap-3 flex-1 group cursor-pointer">
+<div class="relative w-full max-w-[50px] h-[200px] flex items-end justify-center rounded-xl bg-monokai-bg ring-1 ring-monokai-gray/20 group-hover:ring-monokai-gray/40 transition-all duration-300 overflow-hidden">
+<div class="absolute bottom-0 w-full px-1 flex gap-1 justify-center h-full items-end pb-1">
+<div class="w-3 bg-monokai-blue rounded-t-sm group-hover:bg-monokai-blue/90 transition-colors" style="height: 65%;"></div>
+<div class="w-3 bg-monokai-pink rounded-t-sm opacity-90 group-hover:bg-monokai-pink/90 transition-colors delay-75" style="height: 40%;"></div>
+</div>
+</div>
+<span class="text-xs font-medium text-monokai-gray group-hover:text-monokai-fg transition-colors">Week 1</span>
+</div>
+<div class="flex flex-col items-center gap-3 flex-1 group cursor-pointer">
+<div class="relative w-full max-w-[50px] h-[200px] flex items-end justify-center rounded-xl bg-monokai-bg ring-1 ring-monokai-gray/20 group-hover:ring-monokai-gray/40 transition-all duration-300 overflow-hidden">
+<div class="absolute bottom-0 w-full px-1 flex gap-1 justify-center h-full items-end pb-1">
+<div class="w-3 bg-monokai-blue rounded-t-sm group-hover:bg-monokai-blue/90 transition-colors" style="height: 85%;"></div>
+<div class="w-3 bg-monokai-pink rounded-t-sm opacity-90 group-hover:bg-monokai-pink/90 transition-colors delay-75" style="height: 55%;"></div>
+</div>
+</div>
+<span class="text-xs font-medium text-monokai-gray group-hover:text-monokai-fg transition-colors">Week 2</span>
+</div>
+<div class="flex flex-col items-center gap-3 flex-1 group cursor-pointer">
+<div class="relative w-full max-w-[50px] h-[200px] flex items-end justify-center rounded-xl bg-monokai-bg ring-1 ring-monokai-gray/20 group-hover:ring-monokai-gray/40 transition-all duration-300 overflow-hidden">
+<div class="absolute bottom-0 w-full px-1 flex gap-1 justify-center h-full items-end pb-1">
+<div class="w-3 bg-monokai-blue rounded-t-sm group-hover:bg-monokai-blue/90 transition-colors" style="height: 45%;"></div>
+<div class="w-3 bg-monokai-pink rounded-t-sm opacity-90 group-hover:bg-monokai-pink/90 transition-colors delay-75" style="height: 60%;"></div>
+</div>
+</div>
+<span class="text-xs font-medium text-monokai-gray group-hover:text-monokai-fg transition-colors">Week 3</span>
+</div>
+<div class="flex flex-col items-center gap-3 flex-1 group cursor-pointer">
+<div class="relative w-full max-w-[50px] h-[200px] flex items-end justify-center rounded-xl bg-monokai-bg ring-1 ring-monokai-gray/20 group-hover:ring-monokai-gray/40 transition-all duration-300 overflow-hidden">
+<div class="absolute bottom-0 w-full px-1 flex gap-1 justify-center h-full items-end pb-1">
+<div class="w-3 bg-monokai-blue rounded-t-sm group-hover:bg-monokai-blue/90 transition-colors" style="height: 90%;"></div>
+<div class="w-3 bg-monokai-pink rounded-t-sm opacity-90 group-hover:bg-monokai-pink/90 transition-colors delay-75" style="height: 30%;"></div>
+</div>
+</div>
+<span class="text-xs font-medium text-monokai-gray group-hover:text-monokai-fg transition-colors">Week 4</span>
+</div>
+</div>
+<div class="flex items-center justify-center gap-8 mt-6 pt-6 border-t border-monokai-gray/20">
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors cursor-default">
+<div class="w-2.5 h-2.5 rounded-sm bg-monokai-blue"></div>
+<span class="text-xs font-semibold text-monokai-fg/80">Income</span>
+</div>
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors cursor-default">
+<div class="w-2.5 h-2.5 rounded-sm bg-monokai-pink"></div>
+<span class="text-xs font-semibold text-monokai-fg/80">Expenses</span>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-2xl overflow-hidden shadow-lg">
+<div class="p-6 border-b border-monokai-gray/20 flex justify-between items-center bg-monokai-bg/50">
+<h3 class="text-lg font-bold text-monokai-fg flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-monokai-green/10 flex items-center justify-center text-monokai-green">
+<span class="material-symbols-outlined text-sm">receipt_long</span>
+</div>
+                                    Recent Transactions
+                                </h3>
+<button class="text-xs font-bold text-monokai-fg bg-monokai-gray/20 hover:bg-monokai-gray/30 px-3 py-1.5 rounded-lg transition-all border border-monokai-gray/30">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-monokai-bg text-xs uppercase text-monokai-gray font-bold tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">Merchant</th>
+<th class="px-6 py-4 font-semibold">Category</th>
+<th class="px-6 py-4 font-semibold">Date</th>
+<th class="px-6 py-4 text-right font-semibold">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-monokai-gray/20 text-sm">
+<tr class="group hover:bg-white/5 transition-colors duration-200">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-lg bg-monokai-bg flex items-center justify-center text-monokai-purple group-hover:text-monokai-fg group-hover:bg-monokai-purple transition-all duration-300 ring-1 ring-monokai-gray/20">
+<span class="material-symbols-outlined text-[18px]">nutrition</span>
+</div>
+<span class="font-semibold text-monokai-fg group-hover:text-monokai-purple transition-colors">Whole Foods Market</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-monokai-bg text-[10px] font-bold border border-monokai-gray/30 text-monokai-gray uppercase tracking-wider">Groceries</span>
+</td>
+<td class="px-6 py-4 text-monokai-gray">Oct 24</td>
+<td class="px-6 py-4 text-right font-bold text-monokai-fg">-$142.50</td>
+</tr>
+<tr class="group hover:bg-white/5 transition-colors duration-200">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-lg bg-monokai-bg flex items-center justify-center text-monokai-pink group-hover:text-monokai-fg group-hover:bg-monokai-pink transition-all duration-300 ring-1 ring-monokai-gray/20">
+<span class="material-symbols-outlined text-[18px]">movie</span>
+</div>
+<span class="font-semibold text-monokai-fg group-hover:text-monokai-pink transition-colors">Netflix</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-monokai-bg text-[10px] font-bold border border-monokai-gray/30 text-monokai-gray uppercase tracking-wider">Entertainment</span>
+</td>
+<td class="px-6 py-4 text-monokai-gray">Oct 23</td>
+<td class="px-6 py-4 text-right font-bold text-monokai-fg">-$15.99</td>
+</tr>
+<tr class="group hover:bg-white/5 transition-colors duration-200">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-lg bg-monokai-bg flex items-center justify-center text-monokai-green group-hover:text-monokai-fg group-hover:bg-monokai-green transition-all duration-300 ring-1 ring-monokai-gray/20">
+<span class="material-symbols-outlined text-[18px]">work</span>
+</div>
+<span class="font-semibold text-monokai-fg group-hover:text-monokai-green transition-colors">Tech Solutions Inc.</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-monokai-green/10 text-[10px] font-bold border border-monokai-green/30 text-monokai-green uppercase tracking-wider">Income</span>
+</td>
+<td class="px-6 py-4 text-monokai-gray">Oct 20</td>
+<td class="px-6 py-4 text-right font-bold text-monokai-green">+$2,450.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="space-y-8">
+<div class="glass-panel rounded-2xl p-6 shadow-lg">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-monokai-fg flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-monokai-blue/10 flex items-center justify-center text-monokai-blue">
+<span class="material-symbols-outlined text-sm">account_balance</span>
+</div>
+                                    Linked Accounts
+                                </h3>
+<button class="p-1.5 rounded-lg hover:bg-monokai-blue/20 text-monokai-blue transition-all border border-monokai-blue/20">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 rounded-xl border border-monokai-gray/20 bg-monokai-bg hover:border-monokai-blue/50 hover:bg-monokai-bg/80 transition-all duration-300 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-monokai-dark flex items-center justify-center border border-monokai-gray/30 group-hover:border-monokai-blue">
+<span class="material-symbols-outlined text-monokai-blue text-lg">account_balance</span>
+</div>
+<div>
+<p class="text-sm font-bold text-monokai-fg group-hover:text-monokai-blue transition-colors">Chase Checking</p>
+<p class="text-[11px] text-monokai-gray">**** 4582</p>
+</div>
+</div>
+<p class="text-sm font-bold text-monokai-fg tracking-wide">$5,240.50</p>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-monokai-gray/20 bg-monokai-bg hover:border-monokai-yellow/50 hover:bg-monokai-bg/80 transition-all duration-300 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-monokai-dark flex items-center justify-center border border-monokai-gray/30 group-hover:border-monokai-yellow">
+<span class="material-symbols-outlined text-monokai-yellow text-lg">savings</span>
+</div>
+<div>
+<p class="text-sm font-bold text-monokai-fg group-hover:text-monokai-yellow transition-colors">Ally Savings</p>
+<p class="text-[11px] text-monokai-gray">**** 9921</p>
+</div>
+</div>
+<p class="text-sm font-bold text-monokai-fg tracking-wide">$32,000.00</p>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-monokai-gray/20 bg-monokai-bg hover:border-monokai-pink/50 hover:bg-monokai-bg/80 transition-all duration-300 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-monokai-dark flex items-center justify-center border border-monokai-gray/30 group-hover:border-monokai-pink">
+<span class="material-symbols-outlined text-monokai-pink text-lg">credit_card</span>
+</div>
+<div>
+<p class="text-sm font-bold text-monokai-fg group-hover:text-monokai-pink transition-colors">Amex Gold</p>
+<p class="text-[11px] text-monokai-gray">**** 1002</p>
+</div>
+</div>
+<p class="text-sm font-bold text-monokai-pink tracking-wide">-$450.25</p>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-2xl p-6 shadow-lg">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-monokai-fg flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-monokai-orange/10 flex items-center justify-center text-monokai-orange">
+<span class="material-symbols-outlined text-sm">pie_chart</span>
+</div>
+                                    Top Budgets
+                                </h3>
+<a class="text-xs font-bold text-monokai-gray hover:text-monokai-fg hover:underline uppercase tracking-wide transition-colors" href="#">View All</a>
+</div>
+<div class="space-y-6">
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div class="flex items-center gap-3">
+<div class="text-monokai-blue group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[18px]">shopping_basket</span>
+</div>
+<span class="text-sm font-bold text-monokai-fg group-hover:text-monokai-blue transition-colors">Groceries</span>
+</div>
+<span class="text-xs font-medium text-monokai-gray">$450 <span class="text-monokai-gray/50">/</span> $600</span>
+</div>
+<div class="h-2 w-full bg-monokai-bg rounded-full overflow-hidden border border-monokai-gray/10">
+<div class="h-full bg-monokai-blue w-[75%] rounded-full shadow-[0_0_8px_rgba(102,217,239,0.4)] transition-all duration-500"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div class="flex items-center gap-3">
+<div class="text-monokai-orange group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+</div>
+<span class="text-sm font-bold text-monokai-fg group-hover:text-monokai-orange transition-colors">Dining Out</span>
+</div>
+<span class="text-[10px] font-bold text-monokai-orange bg-monokai-orange/10 px-1.5 py-0.5 rounded border border-monokai-orange/20">Near Limit</span>
+</div>
+<div class="h-2 w-full bg-monokai-bg rounded-full overflow-hidden border border-monokai-gray/10">
+<div class="h-full bg-monokai-orange w-[93%] rounded-full shadow-[0_0_8px_rgba(253,151,31,0.4)] transition-all duration-500"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div class="flex items-center gap-3">
+<div class="text-monokai-pink group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[18px]">directions_car</span>
+</div>
+<span class="text-sm font-bold text-monokai-fg group-hover:text-monokai-pink transition-colors">Transport</span>
+</div>
+<span class="text-xs font-medium text-monokai-gray">$120 <span class="text-monokai-gray/50">/</span> $200</span>
+</div>
+<div class="h-2 w-full bg-monokai-bg rounded-full overflow-hidden border border-monokai-gray/10">
+<div class="h-full bg-monokai-pink w-[60%] rounded-full shadow-[0_0_8px_rgba(249,38,114,0.4)] transition-all duration-500"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main>
+<button class="fixed bottom-10 right-10 h-14 w-14 rounded-full bg-monokai-pink text-white shadow-[0_0_20px_rgba(249,38,114,0.5)] hover:scale-110 hover:bg-monokai-pink/90 transition-all duration-300 z-50 flex items-center justify-center group border-2 border-white/10">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-300 font-bold">add</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SpendBear - Transactions</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Monokai Classic Palette
+                        monokai: {
+                            bg: "#272822",       // Main background
+                            sidebar: "#1e1f1c",  // Darker sidebar
+                            surface: "#3e3d32",  // Card/Element background
+                            border: "#49483e",   // Borders
+                            text: "#f8f8f2",     // Main text
+                            muted: "#75715e",    // Comments/Muted text
+                            pink: "#f92672",     // Keywords / Primary Actions / Negative
+                            blue: "#66d9ef",     // Function arguments / Info / Savings
+                            green: "#a6e22e",    // Strings / Positive / Income
+                            orange: "#fd971f",   // Parameters / Accent
+                            purple: "#ae81ff",   // Constants / Numbers
+                            yellow: "#e6db74",   // Strings / Warnings
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+                        'glow-green': '0 0 15px rgba(166, 226, 46, 0.3)',
+                        'glow-pink': '0 0 15px rgba(249, 38, 114, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #f8f8f2;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #272822;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #49483e;
+            border-radius: 99px;
+            border: 2px solid #272822;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #75715e;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        input[type="checkbox"] {
+            background-color: #3e3d32;
+            border-color: #75715e;
+            color: #f92672;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        input[type="checkbox"]:checked {
+            background-color: #f92672;
+            border-color: #f92672;
+        }
+        input[type="checkbox"]:focus {
+            --tw-ring-color: rgba(249, 38, 114, 0.4);
+            --tw-ring-offset-color: transparent;
+        }::selection {
+            background-color: #49483e;
+            color: #f8f8f2;
+        }
+    </style>
+</head>
+<body class="bg-monokai-bg text-monokai-text min-h-screen flex flex-col font-display antialiased overflow-hidden">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-monokai-sidebar border-r border-monokai-border hidden lg:flex flex-col relative z-20 shadow-xl">
+<div class="h-24 flex items-center px-8 border-b border-monokai-border/30">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="relative flex items-center justify-center">
+<span class="material-symbols-outlined text-monokai-yellow text-3xl transition-transform duration-300 group-hover:rotate-12" style="font-variation-settings: 'FILL' 1;">pets</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-monokai-text">SpendBear</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
+<a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-monokai-muted rounded-lg hover:bg-monokai-surface hover:text-monokai-text transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-monokai-blue transition-colors">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm font-medium bg-monokai-pink/10 text-monokai-pink rounded-lg relative overflow-hidden group border border-monokai-pink/20" href="#">
+<div class="absolute inset-y-0 left-0 w-1 bg-monokai-pink rounded-full"></div>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+                    Transactions
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-monokai-muted rounded-lg hover:bg-monokai-surface hover:text-monokai-text transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-monokai-yellow transition-colors">pie_chart</span>
+                    Budget
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-monokai-muted rounded-lg hover:bg-monokai-surface hover:text-monokai-text transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-monokai-green transition-colors">savings</span>
+                    Goals
+                </a>
+<div class="pt-8 pb-3 px-4 text-[11px] font-bold text-monokai-muted/60 uppercase tracking-widest">
+                    Settings
+                </div>
+<a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-monokai-muted rounded-lg hover:bg-monokai-surface hover:text-monokai-text transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-monokai-orange transition-colors">settings</span>
+                    Preferences
+                </a>
+</nav>
+<div class="p-4 m-4 rounded-xl bg-monokai-surface border border-monokai-border cursor-pointer group hover:border-monokai-muted/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-monokai-bg overflow-hidden ring-2 ring-monokai-border group-hover:ring-monokai-blue transition-all">
+<img alt="User" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV-ZbuVFdDTDEGCtLdIkYmCAdGW3oe0hoxWgT4WGMII0Hrmau5HoWLbuBN4EDQPelJu2NcGqLmcjFcZlTBGo5ozZDoo1G3KV3KxiqIqZfPQE4MV8VPBVHmeMxTk28dvdFQn2swZUIKs-qCcj99Fv51xyY5c7P9Xe6jUkserJ3qLj5qVZqb-dHIL6hg_tD-9chdvb2ADyAEa6L8FURJ1dG45fA4o9F6mVvNo7McoNzJ774TwuFKQSL-BRSXzWgVYF2d0HBjrP0lPw0"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-monokai-text group-hover:text-monokai-blue transition-colors">Alex Bear</span>
+<span class="text-xs text-monokai-muted">Pro Member</span>
+</div>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col h-full overflow-hidden relative bg-monokai-bg">
+<header class="lg:hidden h-16 flex items-center justify-between px-4 bg-monokai-sidebar border-b border-monokai-border z-30 sticky top-0">
+<div class="flex items-center gap-2 text-monokai-text">
+<span class="material-symbols-outlined text-monokai-yellow" style="font-variation-settings: 'FILL' 1;">pets</span>
+<span class="text-lg font-bold">SpendBear</span>
+</div>
+<button class="p-2 text-monokai-muted hover:text-monokai-text transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto custom-scrollbar p-4 lg:p-8 scroll-smooth relative">
+<div class="max-w-7xl mx-auto space-y-8 relative z-10">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-2 border-b border-monokai-border/30 pb-6">
+<div>
+<h1 class="text-3xl lg:text-4xl font-bold text-monokai-text mb-2 tracking-tight">Transactions</h1>
+<p class="text-monokai-muted text-sm font-medium flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-monokai-green shadow-glow-green"></span>
+                                456 transactions found
+                            </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-transparent border border-monokai-border hover:border-monokai-text/40 hover:bg-monokai-surface text-monokai-text text-sm font-medium transition-all duration-200">
+<span class="material-symbols-outlined text-[18px] text-monokai-blue">upload</span>
+                                Import
+                            </button>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-monokai-pink text-white text-sm font-bold shadow-lg hover:bg-monokai-pink/90 hover:-translate-y-0.5 transition-all duration-200">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                Add New
+                            </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+<div class="bg-monokai-surface rounded-xl p-6 border-l-4 border-monokai-green shadow-soft hover:shadow-lg transition-all duration-300 group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<div class="p-1.5 rounded bg-monokai-bg text-monokai-green">
+<span class="material-symbols-outlined text-[20px]">arrow_outward</span>
+</div>
+<span class="text-monokai-muted text-xs uppercase tracking-wider font-bold">Income</span>
+</div>
+<span class="material-symbols-outlined text-monokai-border group-hover:text-monokai-muted transition-colors">more_horiz</span>
+</div>
+<div>
+<div class="text-2xl lg:text-3xl font-bold text-monokai-text tracking-tight">$12,450.00</div>
+<div class="text-xs font-medium text-monokai-green mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                    +8% vs last month
+                                </div>
+</div>
+</div>
+<div class="bg-monokai-surface rounded-xl p-6 border-l-4 border-monokai-pink shadow-soft hover:shadow-lg transition-all duration-300 group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<div class="p-1.5 rounded bg-monokai-bg text-monokai-pink">
+<span class="material-symbols-outlined text-[20px]">arrow_downward</span>
+</div>
+<span class="text-monokai-muted text-xs uppercase tracking-wider font-bold">Expenses</span>
+</div>
+<span class="material-symbols-outlined text-monokai-border group-hover:text-monokai-muted transition-colors">more_horiz</span>
+</div>
+<div>
+<div class="text-2xl lg:text-3xl font-bold text-monokai-text tracking-tight">$4,285.30</div>
+<div class="text-xs font-medium text-monokai-pink mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                                    -2% vs last month
+                                </div>
+</div>
+</div>
+<div class="bg-monokai-surface rounded-xl p-6 border-l-4 border-monokai-blue shadow-soft hover:shadow-lg transition-all duration-300 group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<div class="p-1.5 rounded bg-monokai-bg text-monokai-blue">
+<span class="material-symbols-outlined text-[20px]">savings</span>
+</div>
+<span class="text-monokai-muted text-xs uppercase tracking-wider font-bold">Net Savings</span>
+</div>
+<span class="material-symbols-outlined text-monokai-border group-hover:text-monokai-muted transition-colors">more_horiz</span>
+</div>
+<div>
+<div class="text-2xl lg:text-3xl font-bold text-monokai-text tracking-tight">$8,164.70</div>
+<div class="text-xs font-medium text-monokai-blue mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pie_chart</span>
+                                    65% savings rate
+                                </div>
+</div>
+</div>
+</div>
+<div class="sticky top-0 z-20 pt-4 pb-4 bg-monokai-bg/95 backdrop-blur-sm border-b border-monokai-border/50 -mx-4 px-4 lg:-mx-8 lg:px-8 flex flex-col lg:flex-row gap-4 items-center justify-between">
+<div class="relative w-full lg:w-96 group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-monokai-muted group-focus-within:text-monokai-yellow transition-colors text-[20px]">search</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-2.5 bg-monokai-sidebar border border-monokai-border rounded-lg text-sm text-monokai-text placeholder:text-monokai-muted focus:ring-1 focus:ring-monokai-yellow focus:border-monokai-yellow transition-all" placeholder="Search transactions..." type="text"/>
+</div>
+<div class="flex items-center gap-3 w-full lg:w-auto overflow-x-auto no-scrollbar py-1">
+<button class="whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-lg bg-monokai-surface border border-monokai-border hover:border-monokai-muted text-xs font-medium text-monokai-text/80 hover:text-monokai-text transition-all active:scale-95">
+<span>This Month</span>
+<span class="material-symbols-outlined text-[16px] text-monokai-orange">expand_more</span>
+</button>
+<button class="whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-lg bg-monokai-surface border border-monokai-border hover:border-monokai-muted text-xs font-medium text-monokai-text/80 hover:text-monokai-text transition-all active:scale-95">
+<span>All Categories</span>
+<span class="material-symbols-outlined text-[16px] text-monokai-purple">expand_more</span>
+</button>
+<button class="whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-lg bg-monokai-surface border border-monokai-border hover:border-monokai-muted text-xs font-medium text-monokai-text/80 hover:text-monokai-text transition-all active:scale-95">
+<span>All Accounts</span>
+<span class="material-symbols-outlined text-[16px] text-monokai-blue">expand_more</span>
+</button>
+<div class="h-6 w-px bg-monokai-border mx-2"></div>
+<button class="p-2 rounded-lg border border-monokai-border bg-monokai-surface hover:bg-monokai-border text-monokai-muted hover:text-monokai-text transition-all" title="Filter">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar pb-2 rounded-xl bg-monokai-sidebar border border-monokai-border shadow-soft">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-monokai-surface border-b border-monokai-border">
+<th class="py-4 px-6 w-12">
+<input class="rounded border-monokai-muted bg-monokai-bg focus:ring-offset-0 focus:ring-2 focus:ring-monokai-pink/20 cursor-pointer" type="checkbox"/>
+</th>
+<th class="py-4 px-4 text-xs font-bold uppercase tracking-wider text-monokai-muted cursor-pointer hover:text-monokai-text transition-colors select-none">Date</th>
+<th class="py-4 px-4 text-xs font-bold uppercase tracking-wider text-monokai-muted cursor-pointer hover:text-monokai-text transition-colors select-none w-1/3">Merchant</th>
+<th class="py-4 px-4 text-xs font-bold uppercase tracking-wider text-monokai-muted select-none">Category</th>
+<th class="py-4 px-4 text-xs font-bold uppercase tracking-wider text-monokai-muted hidden md:table-cell select-none">Account</th>
+<th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-monokai-muted text-right cursor-pointer hover:text-monokai-text transition-colors select-none">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-monokai-border/50">
+<tr class="group transition-colors duration-200 hover:bg-monokai-surface/50 cursor-pointer">
+<td class="py-4 px-6 align-middle">
+<input class="rounded border-monokai-muted bg-monokai-bg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4 text-sm text-monokai-text/70 whitespace-nowrap group-hover:text-monokai-text font-medium">
+                                        Oct 24
+                                    </td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-4">
+<div class="size-9 rounded-full bg-white flex items-center justify-center shrink-0 border border-monokai-border overflow-hidden">
+<img alt="Starbucks" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC15774dtGAk3m3FrLrKY1WMkurJVvU5SYYu17B_RMueW-JNNquTddSQ4xrykzY-wWnMWS1Z-zdrXerJ57bFfqlGYUtvbIxpdTXGc6GPC0T_mPMe17nfRaUMoqvYVP46qFYwCy7OxjMFLWAv1oogM78tPH-r0lhij84CXo1KNn_KwXZrNWannIoGt3tBp2ioLisxuWpnFEiGtokkWl5Ee_Nqq37FIMviz43lBmPh4VEwxndb8g6wvinzXpxnYVcMuTphvb5oOZjj48"/>
+</div>
+<span class="text-sm font-semibold text-monokai-text group-hover:text-monokai-yellow transition-colors tracking-wide">Starbucks</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-monokai-orange/10 text-monokai-orange border border-monokai-orange/20">
+                                            Coffee Shops
+                                        </div>
+</td>
+<td class="py-4 px-4 hidden md:table-cell text-sm text-monokai-muted font-mono text-xs">
+                                        Chase •••• 4022
+                                    </td>
+<td class="py-4 px-6 text-right text-sm font-bold text-monokai-pink">
+                                        -$6.50
+                                    </td>
+</tr>
+<tr class="group transition-colors duration-200 hover:bg-monokai-surface/50 cursor-pointer">
+<td class="py-4 px-6 align-middle">
+<input class="rounded border-monokai-muted bg-monokai-bg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4 text-sm text-monokai-text/70 whitespace-nowrap group-hover:text-monokai-text font-medium">
+                                        Oct 23
+                                    </td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-4">
+<div class="size-9 rounded-full bg-white flex items-center justify-center shrink-0 border border-monokai-border overflow-hidden">
+<img alt="Acme Corp" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRJY6ckiYUyxaYxHVAmsZYJn311zWr4B40XFoMK4hlaYoqL4_ExVEfMLmQjtvyf-oCU63NHp2DTus-2LmIUM55XRGmYzaHrhnxuWXTJ0EmrRuyyjvI-wbqBBGNx6Puh8UaZd9fhD501CSLyW7fHAglbhJ_E64oqJ5eYyy0I4xy2hJET3SpYscCPmBEfdJIFeHt1mscOXgkP5Vi727rb_iXmKgeABT_AWK_O30S_VKO-XLKcqjYcqpQHyuCL_oAzQBSL-alaJEfd9I"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-monokai-text group-hover:text-monokai-yellow transition-colors tracking-wide">Acme Corp Payroll</span>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-monokai-green opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-monokai-green"></span>
+</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-monokai-green/10 text-monokai-green border border-monokai-green/20">
+                                            Income
+                                        </div>
+</td>
+<td class="py-4 px-4 hidden md:table-cell text-sm text-monokai-muted font-mono text-xs">
+                                        Checking •••• 8821
+                                    </td>
+<td class="py-4 px-6 text-right text-sm font-bold text-monokai-green">
+                                        +$2,450.00
+                                    </td>
+</tr>
+<tr class="group transition-colors duration-200 hover:bg-monokai-surface/50 cursor-pointer">
+<td class="py-4 px-6 align-middle">
+<input class="rounded border-monokai-muted bg-monokai-bg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4 text-sm text-monokai-text/70 whitespace-nowrap group-hover:text-monokai-text font-medium">
+                                        Oct 22
+                                    </td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-4">
+<div class="size-9 rounded-full bg-monokai-surface flex items-center justify-center shrink-0 border border-monokai-border text-monokai-text/50 group-hover:text-monokai-yellow transition-colors">
+<span class="material-symbols-outlined text-[18px]">storefront</span>
+</div>
+<span class="text-sm font-semibold text-monokai-text group-hover:text-monokai-yellow transition-colors tracking-wide">Whole Foods Market</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-monokai-yellow/10 text-monokai-yellow border border-monokai-yellow/20">
+                                            Groceries
+                                        </div>
+</td>
+<td class="py-4 px-4 hidden md:table-cell text-sm text-monokai-muted font-mono text-xs">
+                                        Amex Gold •••• 1004
+                                    </td>
+<td class="py-4 px-6 text-right text-sm font-bold text-monokai-pink">
+                                        -$124.32
+                                    </td>
+</tr>
+<tr class="group transition-colors duration-200 hover:bg-monokai-surface/50 cursor-pointer">
+<td class="py-4 px-6 align-middle">
+<input class="rounded border-monokai-muted bg-monokai-bg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4 text-sm text-monokai-text/70 whitespace-nowrap group-hover:text-monokai-text font-medium">
+                                        Oct 22
+                                    </td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-4">
+<div class="size-9 rounded-full bg-monokai-surface flex items-center justify-center shrink-0 border border-monokai-border text-monokai-text/50 group-hover:text-monokai-yellow transition-colors">
+<span class="material-symbols-outlined text-[18px]">local_gas_station</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-monokai-text/90 italic group-hover:text-monokai-yellow transition-colors tracking-wide">Pending Transaction</span>
+<span class="text-xs text-monokai-muted">Shell Station</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-monokai-muted/10 text-monokai-muted border border-monokai-muted/30 border-dashed">
+                                            Uncategorized
+                                        </div>
+</td>
+<td class="py-4 px-4 hidden md:table-cell text-sm text-monokai-muted font-mono text-xs">
+                                        Visa •••• 4022
+                                    </td>
+<td class="py-4 px-6 text-right text-sm font-medium text-monokai-muted italic">
+                                        -$45.00
+                                    </td>
+</tr>
+<tr class="group transition-colors duration-200 hover:bg-monokai-surface/50 cursor-pointer">
+<td class="py-4 px-6 align-middle">
+<input class="rounded border-monokai-muted bg-monokai-bg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4 text-sm text-monokai-text/70 whitespace-nowrap group-hover:text-monokai-text font-medium">
+                                        Oct 21
+                                    </td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-4">
+<div class="size-9 rounded-full bg-white flex items-center justify-center shrink-0 border border-monokai-border overflow-hidden">
+<img alt="Netflix" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOh9ChCaz3CRrqizMdM26Q_Zxm6WczeGgV3_0YrDxm-wcYcVEPZ65VXinidOj4DmsIar6Fx77FYNNNzvWyaHCB0iL1sOmaFJGOJY8xLgGgbnve2X4G9BNBPz4DO6wvBSVr3RFajP63Kcd4N9ZNqE_B0DYKQ25PgUhKxbic85TSQjw-7rM4393JnQaMFm8KQs3JfITz6tBwcCs4VppRdH2-pmXjZo9_e6HrMmYDSthV3HOUO6UicnaSbbINNtLKgKdvWU80Wa9zMoI"/>
+</div>
+<span class="text-sm font-semibold text-monokai-text group-hover:text-monokai-yellow transition-colors tracking-wide">Netflix Subscription</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-monokai-purple/10 text-monokai-purple border border-monokai-purple/20">
+                                            Entertainment
+                                        </div>
+</td>
+<td class="py-4 px-4 hidden md:table-cell text-sm text-monokai-muted font-mono text-xs">
+                                        Chase •••• 4022
+                                    </td>
+<td class="py-4 px-6 text-right text-sm font-bold text-monokai-pink">
+                                        -$15.99
+                                    </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="py-4 flex items-center justify-between mt-4 border-t border-monokai-border/30">
+<span class="text-sm text-monokai-muted">Page 1 of 12</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg text-monokai-muted hover:text-monokai-text hover:bg-monokai-surface disabled:opacity-50 transition-all active:scale-95 border border-transparent hover:border-monokai-border" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg text-monokai-muted hover:text-monokai-text hover:bg-monokai-surface transition-all active:scale-95 border border-transparent hover:border-monokai-border">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>
