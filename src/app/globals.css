@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Existing colors */
   --background-light: #f8f5f6;
   --background-dark: #1E1F1C;
   --surface-dark: #272822;
@@ -11,9 +12,18 @@
   --accent-yellow: #e6db74;
   --text-main: #F8F8F2;
   --text-muted: #cfcfc2;
+
+  /* Additional Monokai colors from dashboard */
+  --monokai-orange: #FD971F;
+  --monokai-purple: #AE81FF;
+  --monokai-gray: #75715E;
+  --monokai-dark: #1E1F1C;
+  --surface-dark-highlight: #49483E;
+  --border-color: #75715E;
 }
 
 @theme inline {
+  /* Existing theme vars */
   --color-primary: var(--primary);
   --color-background-light: var(--background-light);
   --color-background-dark: var(--background-dark);
@@ -23,8 +33,86 @@
   --color-accent-yellow: var(--accent-yellow);
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
+
+  /* New theme vars */
+  --color-monokai-orange: var(--monokai-orange);
+  --color-monokai-purple: var(--monokai-purple);
+  --color-monokai-gray: var(--monokai-gray);
+  --color-monokai-dark: var(--monokai-dark);
+  --color-surface-dark-highlight: var(--surface-dark-highlight);
+  --color-border-color: var(--border-color);
+
+  /* Font */
   --font-display: Inter, sans-serif;
 }
+
+/* Custom classes from dashboard design */
+.glass-panel {
+  background: #2D2E28;
+  border: 1px solid #49483E;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.glass-sidebar {
+  background: #1E1F1C;
+  border-right: 1px solid #49483E;
+}
+
+.nav-item-active {
+  background: #3E3D32;
+  color: #F92672;
+  border-left: 3px solid #F92672;
+}
+
+.nav-item-active .material-symbols-outlined {
+  color: #F92672;
+}
+
+/* Scrollbar styling (from dashboard) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E1F1C;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #75715E;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AE81FF;
+}
+
+/* Material Symbols settings */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.icon-filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Animation utilities */
+.animate-enter {
+  animation: enter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@keyframes enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
 
 body {
   font-family: Inter, sans-serif;
