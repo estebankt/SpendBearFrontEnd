@@ -1,11 +1,17 @@
+'use client';
+
 import { Transaction, TransactionType } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
+import { useDeleteTransaction } from '@/lib/hooks/use-transactions';
 
 interface TransactionRowProps {
   transaction: Transaction;
+  onEdit?: (transaction: Transaction) => void;
 }
 
-export default function TransactionRow({ transaction }: TransactionRowProps) {
+export default function TransactionRow({ transaction, onEdit }: TransactionRowProps) {
+  const deleteMutation = useDeleteTransaction();
+
   const formattedDate = new Date(transaction.date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -14,6 +20,12 @@ export default function TransactionRow({ transaction }: TransactionRowProps) {
   });
 
   const isIncome = transaction.type === TransactionType.Income;
+
+  const handleDelete = () => {
+    if (confirm('Delete this transaction?')) {
+      deleteMutation.mutate(transaction.id);
+    }
+  };
 
   return (
     <tr className="border-b border-border-muted hover:bg-surface-dark-highlight transition-colors">
@@ -65,6 +77,27 @@ export default function TransactionRow({ transaction }: TransactionRowProps) {
         >
           {isIncome ? '+' : '-'}{formatCurrency(transaction.amount)}
         </p>
+      </td>
+
+      {/* Actions */}
+      <td className="py-4 px-4 text-right">
+        <div className="flex justify-end gap-1">
+          <button
+            onClick={() => onEdit?.(transaction)}
+            className="p-1 hover:bg-surface-dark-highlight rounded transition-colors"
+            title="Edit"
+          >
+            <span className="material-symbols-outlined text-text-muted text-lg">edit</span>
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="p-1 hover:bg-surface-dark-highlight rounded transition-colors disabled:opacity-50"
+            title="Delete"
+          >
+            <span className="material-symbols-outlined text-text-muted text-lg">delete</span>
+          </button>
+        </div>
       </td>
     </tr>
   );

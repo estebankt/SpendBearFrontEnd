@@ -1,0 +1,1202 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "SpendBear API",
+    "description": "Personal finance management API for tracking transactions, budgets, and analytics",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5109/"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "SpendBear.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/analytics/summary/monthly": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get monthly financial summary including income, expenses, and spending by category",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year for the summary (2000-2100)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month for the summary (1-12)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Monthly summary retrieved successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlySummaryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlySummaryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlySummaryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid year or month parameters",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/budgets": {
+      "post": {
+        "tags": [
+          "Budgets"
+        ],
+        "summary": "Create a new budget",
+        "requestBody": {
+          "description": "Budget details including amount, period, category, and thresholds",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBudgetRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBudgetRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBudgetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created budget"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Budgets"
+        ],
+        "summary": "Get budgets with optional filtering",
+        "parameters": [
+          {
+            "name": "activeOnly",
+            "in": "query",
+            "description": "Filter to show only active budgets (within current period)",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "Filter by specific category (null for global budgets)",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Filter budgets active on this specific date",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budgets retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/budgets/{id}": {
+      "put": {
+        "tags": [
+          "Budgets"
+        ],
+        "summary": "Update an existing budget",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Budget ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated budget details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBudgetRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBudgetRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBudgetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Budget updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Budgets"
+        ],
+        "summary": "Delete a budget",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Budget ID to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content on success"
+          }
+        }
+      }
+    },
+    "/api/identity/register": {
+      "post": {
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Register a new user in the system",
+        "requestBody": {
+          "description": "User registration details including email and name",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully registered"
+          }
+        }
+      }
+    },
+    "/api/identity/me": {
+      "get": {
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Get the authenticated user's profile information",
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Get notifications with optional filtering and pagination",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by notification status (Pending, Read, Dismissed)",
+            "schema": {
+              "$ref": "#/components/schemas/NotificationStatus"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by notification type (BudgetWarning, BudgetExceeded, etc.)",
+            "schema": {
+              "$ref": "#/components/schemas/NotificationType"
+            }
+          },
+          {
+            "name": "unreadOnly",
+            "in": "query",
+            "description": "Show only unread notifications",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Page number for pagination (default: 1)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page (default: 50)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/notifications/{id}/read": {
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Mark a notification as read",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification ID to mark as read",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content on success"
+          }
+        }
+      }
+    },
+    "/api/spending/categories": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Create a new personal transaction category",
+        "description": "Note: You cannot create a category with the same name as a system category.\nSystem categories are read-only and available to all users.",
+        "requestBody": {
+          "description": "Category details including name and optional description",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created category"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all available categories for the authenticated user",
+        "description": "Returns both system-wide categories (isSystemCategory: true) and your personal categories (isSystemCategory: false).\nSystem categories are ordered first, followed by personal categories, all sorted alphabetically within their groups.\nSystem categories cannot be modified or deleted.",
+        "responses": {
+          "200": {
+            "description": "Categories retrieved successfully. Includes system categories (read-only) and user's personal categories."
+          }
+        }
+      }
+    },
+    "/api/spending/transactions": {
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create a new financial transaction (income or expense)",
+        "requestBody": {
+          "description": "Transaction details including amount, date, category, and type",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created transaction"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transactions with optional filtering and pagination",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Filter by transactions on or after this date",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Filter by transactions on or before this date",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "Filter by specific category",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by transaction type (Income or Expense)",
+            "schema": {
+              "$ref": "#/components/schemas/TransactionType"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Page number for pagination (default: 1)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page (default: 50, max: 100)",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/spending/transactions/{id}": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Update an existing transaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated transaction details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Delete a transaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction ID to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content on success"
+          }
+        }
+      }
+    },
+    "/api/statement-import/upload": {
+      "post": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "Upload a credit card statement PDF for parsing",
+        "requestBody": {
+          "description": "PDF file of the credit card statement",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "$ref": "#/components/schemas/IFormFile"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The parsed statement with AI-categorized transactions"
+          }
+        }
+      }
+    },
+    "/api/statement-import/{id}": {
+      "get": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "Get a statement import by ID with all parsed transactions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement upload ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statement retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/statement-import/{id}/transactions": {
+      "put": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "Update categories on parsed transactions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement upload ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of transaction category updates",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Transactions updated successfully"
+          }
+        }
+      }
+    },
+    "/api/statement-import/{id}/confirm": {
+      "post": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "Confirm the import, creating transactions in the Spending module",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement upload ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content on success"
+          }
+        }
+      }
+    },
+    "/api/statement-import/{id}/cancel": {
+      "post": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "Cancel a pending import",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement upload ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content on success"
+          }
+        }
+      }
+    },
+    "/api/statement-import": {
+      "get": {
+        "tags": [
+          "StatementImport"
+        ],
+        "summary": "List all statement imports for the current user",
+        "responses": {
+          "200": {
+            "description": "Imports retrieved successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BudgetPeriod": {
+        "type": "integer"
+      },
+      "CreateBudgetRequest": {
+        "required": [
+          "name",
+          "amount",
+          "currency",
+          "period"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "period": {
+            "$ref": "#/components/schemas/BudgetPeriod"
+          },
+          "startDate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "categoryId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
+          },
+          "warningThreshold": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double",
+            "default": 80
+          }
+        }
+      },
+      "CreateCategoryRequest": {
+        "required": [
+          "name",
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category name (must be unique and not conflict with system categories)"
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional category description"
+          }
+        },
+        "description": "Request to create a new personal category"
+      },
+      "CreateTransactionRequest": {
+        "required": [
+          "amount",
+          "currency",
+          "date",
+          "description",
+          "categoryId",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "description": "Transaction amount (positive for income, positive for expense)",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code (e.g., USD, EUR)"
+          },
+          "date": {
+            "type": "string",
+            "description": "Transaction date",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "description": "Transaction description"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Category ID this transaction belongs to",
+            "format": "uuid"
+          },
+          "type": {
+            "description": "Transaction type (Income or Expense)",
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        },
+        "description": "Request to create a new transaction"
+      },
+      "IFormFile": {
+        "type": "string",
+        "format": "binary"
+      },
+      "MonthlySummaryDto": {
+        "required": [
+          "periodStart",
+          "periodEnd",
+          "totalIncome",
+          "totalExpense",
+          "netBalance",
+          "spendingByCategory",
+          "incomeByCategory"
+        ],
+        "type": "object",
+        "properties": {
+          "periodStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalIncome": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "totalExpense": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "netBalance": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "spendingByCategory": {
+            "type": "object",
+            "additionalProperties": {
+              "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+              "type": [
+                "number",
+                "string"
+              ],
+              "format": "double"
+            }
+          },
+          "incomeByCategory": {
+            "type": "object",
+            "additionalProperties": {
+              "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+              "type": [
+                "number",
+                "string"
+              ],
+              "format": "double"
+            }
+          }
+        }
+      },
+      "NotificationStatus": {
+        "type": "integer"
+      },
+      "NotificationType": {
+        "type": "integer"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "RegisterRequest": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email address"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User's first name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User's last name"
+          }
+        },
+        "description": "User registration request"
+      },
+      "TransactionType": {
+        "type": "integer"
+      },
+      "TransactionUpdateItem": {
+        "required": [
+          "parsedTransactionId",
+          "newCategoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "parsedTransactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "newCategoryId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "description": "Individual transaction category update"
+      },
+      "UpdateBudgetRequest": {
+        "required": [
+          "name",
+          "amount",
+          "period"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "period": {
+            "$ref": "#/components/schemas/BudgetPeriod"
+          },
+          "startDate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "categoryId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
+          },
+          "warningThreshold": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double",
+            "default": 80
+          }
+        }
+      },
+      "UpdateTransactionRequest": {
+        "required": [
+          "amount",
+          "currency",
+          "date",
+          "description",
+          "categoryId",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "description": "Updated transaction amount",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Updated currency code"
+          },
+          "date": {
+            "type": "string",
+            "description": "Updated transaction date",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "description": "Updated description"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Updated category ID",
+            "format": "uuid"
+          },
+          "type": {
+            "description": "Updated transaction type",
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        },
+        "description": "Request to update an existing transaction"
+      },
+      "UpdateTransactionsRequest": {
+        "required": [
+          "updates"
+        ],
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionUpdateItem"
+            }
+          }
+        },
+        "description": "Request to update parsed transaction categories"
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Input your Bearer token to access this API",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "SpendBear.Api"
+    },
+    {
+      "name": "Analytics"
+    },
+    {
+      "name": "Budgets"
+    },
+    {
+      "name": "Identity"
+    },
+    {
+      "name": "Notifications"
+    },
+    {
+      "name": "Categories"
+    },
+    {
+      "name": "Transactions"
+    },
+    {
+      "name": "StatementImport"
+    }
+  ]
+}

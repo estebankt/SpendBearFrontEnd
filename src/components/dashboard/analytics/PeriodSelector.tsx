@@ -6,12 +6,16 @@ interface PeriodSelectorProps {
   selectedPeriod: Period;
   onPeriodChange: (period: Period) => void;
   currentPeriodLabel: string;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
 export default function PeriodSelector({
   selectedPeriod,
   onPeriodChange,
   currentPeriodLabel,
+  onPrev,
+  onNext,
 }: PeriodSelectorProps) {
   return (
     <div className="flex items-center justify-between mb-6">
@@ -51,13 +55,13 @@ export default function PeriodSelector({
 
       {/* Period Navigation */}
       <div className="flex items-center gap-2 bg-surface-dark-highlight rounded-lg px-4 py-2">
-        <button className="text-text-muted hover:text-text-main transition-colors">
+        <button onClick={onPrev} className="text-text-muted hover:text-text-main transition-colors">
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
         <span className="text-sm font-medium text-text-main min-w-[120px] text-center">
           {currentPeriodLabel}
         </span>
-        <button className="text-text-muted hover:text-text-main transition-colors">
+        <button onClick={onNext} className="text-text-muted hover:text-text-main transition-colors">
           <span className="material-symbols-outlined">chevron_right</span>
         </button>
       </div>
