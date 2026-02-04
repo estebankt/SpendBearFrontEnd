@@ -1,7 +1,7 @@
 'use client';
 
 import { TransactionType } from '@/lib/types';
-import { CATEGORIES } from '@/lib/constants';
+import { useCategories } from '@/lib/hooks/use-categories';
 
 interface TransactionFiltersProps {
   searchQuery: string;
@@ -20,6 +20,8 @@ export default function TransactionFilters({
   selectedType,
   onTypeChange,
 }: TransactionFiltersProps) {
+  const { data: categories = [] } = useCategories();
+
   return (
     <div className="glass-panel rounded-lg p-6 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -48,7 +50,7 @@ export default function TransactionFilters({
             className="flex-1 bg-transparent text-text-main focus:outline-none cursor-pointer"
           >
             <option value="all">All Categories</option>
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
@@ -65,7 +67,7 @@ export default function TransactionFilters({
             value={selectedType}
             onChange={(e) => {
               const value = e.target.value;
-              onTypeChange(value === 'all' ? 'all' : parseInt(value) as TransactionType);
+              onTypeChange(value === 'all' ? 'all' : value as TransactionType);
             }}
             className="flex-1 bg-transparent text-text-main focus:outline-none cursor-pointer"
           >

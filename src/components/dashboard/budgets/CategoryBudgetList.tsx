@@ -3,9 +3,10 @@ import CategoryBudgetItem from './CategoryBudgetItem';
 
 interface CategoryBudgetListProps {
   budgets: CategoryBudget[];
+  onEdit?: (budget: CategoryBudget) => void;
 }
 
-export default function CategoryBudgetList({ budgets }: CategoryBudgetListProps) {
+export default function CategoryBudgetList({ budgets, onEdit }: CategoryBudgetListProps) {
   // Sort budgets by percentage used (highest first)
   const sortedBudgets = [...budgets].sort((a, b) => b.percentageUsed - a.percentageUsed);
 
@@ -21,9 +22,6 @@ export default function CategoryBudgetList({ budgets }: CategoryBudgetListProps)
         <p className="text-sm text-text-muted mb-6">
           Create your first budget to start tracking your spending.
         </p>
-        <button className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors">
-          Create Budget
-        </button>
       </div>
     );
   }
@@ -40,7 +38,7 @@ export default function CategoryBudgetList({ budgets }: CategoryBudgetListProps)
 
       <div className="divide-y divide-border-muted">
         {sortedBudgets.map((budget) => (
-          <CategoryBudgetItem key={budget.id} budget={budget} />
+          <CategoryBudgetItem key={budget.id} budget={budget} onEdit={onEdit} />
         ))}
       </div>
     </div>

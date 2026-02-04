@@ -2,37 +2,51 @@
 
 import { useState, useMemo } from 'react';
 import { TransactionType } from '@/lib/types';
-import { TRANSACTIONS_DATA } from '@/lib/constants';
+import { useTransactions } from '@/lib/hooks/use-transactions';
+import { useCategories } from '@/lib/hooks/use-categories';
+import { mapTransaction } from '@/lib/api/mappers';
 import TransactionSummaryCards from '@/components/dashboard/transactions/TransactionSummaryCards';
 import TransactionFilters from '@/components/dashboard/transactions/TransactionFilters';
 import TransactionList from '@/components/dashboard/transactions/TransactionList';
+import TransactionFormDialog from '@/components/dashboard/transactions/TransactionFormDialog';
+import type { ApiTransaction } from '@/lib/api/types';
 
 export default function TransactionsPage() {
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedType, setSelectedType] = useState<TransactionType | 'all'>('all');
+  const [pageNumber, setPageNumber] = useState(1);
 
-  // Filter transactions based on current filters
+  // Form dialog state
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<ApiTransaction | null>(null);
+
+  // Build API params (server-side filtering for category and type)
+  const apiParams = useMemo(() => ({
+    pageNumber,
+    pageSize: 50,
+    ...(selectedCategory !== 'all' && { categoryId: selectedCategory }),
+    ...(selectedType !== 'all' && { type: selectedType }),
+  }), [pageNumber, selectedCategory, selectedType]);
+
+  const { data: transactionsData, isLoading, isError } = useTransactions(apiParams);
+  const { data: categories = [] } = useCategories();
+
+  // Map API transactions to display type
+  const mappedTransactions = useMemo(() => {
+    if (!transactionsData?.items) return [];
+    return transactionsData.items.map((t) => mapTransaction(t, categories));
+  }, [transactionsData, categories]);
+
+  // Client-side search filter (backend doesn't support text search)
   const filteredTransactions = useMemo(() => {
-    return TRANSACTIONS_DATA.filter((transaction) => {
-      // Search filter (merchant or description)
-      const matchesSearch =
-        searchQuery === '' ||
-        transaction.merchant.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        transaction.description?.toLowerCase().includes(searchQuery.toLowerCase());
-
-      // Category filter
-      const matchesCategory =
-        selectedCategory === 'all' || transaction.categoryId === selectedCategory;
-
-      // Type filter
-      const matchesType =
-        selectedType === 'all' || transaction.type === selectedType;
-
-      return matchesSearch && matchesCategory && matchesType;
-    });
-  }, [searchQuery, selectedCategory, selectedType]);
+    if (!searchQuery) return mappedTransactions;
+    return mappedTransactions.filter((transaction) =>
+      transaction.merchant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      transaction.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [mappedTransactions, searchQuery]);
 
   // Calculate summary totals from filtered transactions
   const summary = useMemo(() => {
@@ -51,6 +65,8 @@ export default function TransactionsPage() {
     };
   }, [filteredTransactions]);
 
+  const totalPages = transactionsData?.totalPages ?? 1;
+
   return (
     <div className="max-w-7xl">
       {/* Page Header */}
@@ -66,7 +82,10 @@ export default function TransactionsPage() {
             <span className="material-symbols-outlined text-xl">upload</span>
             Import
           </button>
-          <button className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+          <button
+            onClick={() => { setEditingTransaction(null); setFormOpen(true); }}
+            className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+          >
             <span className="material-symbols-outlined text-xl">add</span>
             Add New
           </button>
@@ -85,13 +104,50 @@ export default function TransactionsPage() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
+        onCategoryChange={(cat) => { setSelectedCategory(cat); setPageNumber(1); }}
         selectedType={selectedType}
-        onTypeChange={setSelectedType}
+        onTypeChange={(type) => { setSelectedType(type); setPageNumber(1); }}
       />
 
+      {/* Loading/Error States */}
+      {isLoading && (
+        <div className="glass-panel rounded-lg p-12 text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-sm text-text-muted">Loading transactions...</p>
+        </div>
+      )}
+
+      {isError && (
+        <div className="glass-panel rounded-lg p-12 text-center">
+          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">error</span>
+          <p className="text-sm text-text-muted">Failed to load transactions</p>
+        </div>
+      )}
+
       {/* Transactions List */}
-      <TransactionList transactions={filteredTransactions} />
+      {!isLoading && !isError && (
+        <TransactionList
+          transactions={filteredTransactions}
+          pageNumber={pageNumber}
+          totalPages={totalPages}
+          onPageChange={setPageNumber}
+          onEdit={(t) => {
+            // Find the raw API transaction to edit
+            const raw = transactionsData?.items.find((item) => item.id === t.id);
+            if (raw) {
+              setEditingTransaction(raw);
+              setFormOpen(true);
+            }
+          }}
+        />
+      )}
+
+      {/* Transaction Form Dialog */}
+      <TransactionFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        transaction={editingTransaction}
+      />
     </div>
   );
 }

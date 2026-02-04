@@ -1,11 +1,17 @@
+'use client';
+
 import { CategoryBudget } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
+import { useDeleteBudget } from '@/lib/hooks/use-budgets';
 
 interface CategoryBudgetItemProps {
   budget: CategoryBudget;
+  onEdit?: (budget: CategoryBudget) => void;
 }
 
-export default function CategoryBudgetItem({ budget }: CategoryBudgetItemProps) {
+export default function CategoryBudgetItem({ budget, onEdit }: CategoryBudgetItemProps) {
+  const deleteMutation = useDeleteBudget();
+
   const {
     category,
     icon,
@@ -17,6 +23,12 @@ export default function CategoryBudgetItem({ budget }: CategoryBudgetItemProps) 
     isOverBudget,
     isNearLimit,
   } = budget;
+
+  const handleDelete = () => {
+    if (confirm('Delete this budget?')) {
+      deleteMutation.mutate(budget.id);
+    }
+  };
 
   return (
     <div className="p-4 border-b border-border-muted last:border-b-0 hover:bg-surface-dark-highlight/50 transition-colors">
@@ -57,6 +69,7 @@ export default function CategoryBudgetItem({ budget }: CategoryBudgetItemProps) 
           {/* Action Buttons */}
           <div className="flex gap-1">
             <button
+              onClick={() => onEdit?.(budget)}
               className="p-1 hover:bg-surface-dark-highlight rounded transition-colors"
               title="Edit budget"
             >
@@ -65,7 +78,9 @@ export default function CategoryBudgetItem({ budget }: CategoryBudgetItemProps) 
               </span>
             </button>
             <button
-              className="p-1 hover:bg-surface-dark-highlight rounded transition-colors"
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="p-1 hover:bg-surface-dark-highlight rounded transition-colors disabled:opacity-50"
               title="Delete budget"
             >
               <span className="material-symbols-outlined text-text-muted text-lg">

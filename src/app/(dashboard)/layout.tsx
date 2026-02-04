@@ -1,6 +1,7 @@
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
 import Sidebar from '@/components/dashboard/Sidebar';
+import AuthGuard from '@/components/providers/AuthGuard';
 
 export default async function DashboardLayout({
   children,
@@ -22,7 +23,7 @@ export default async function DashboardLayout({
       <Sidebar user={session.user} />
 
       <main className="flex-1 h-full overflow-y-auto relative z-10 p-8">
-        {children}
+        <AuthGuard>{children}</AuthGuard>
       </main>
     </div>
   );

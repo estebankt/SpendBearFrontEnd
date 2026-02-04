@@ -5,8 +5,8 @@
 
 // Transaction Types
 export enum TransactionType {
-  Income = 0,
-  Expense = 1,
+  Income = 'Income',
+  Expense = 'Expense',
 }
 
 export interface Transaction {
@@ -25,9 +25,9 @@ export interface Transaction {
 
 // Budget Types
 export enum BudgetPeriod {
-  Monthly = 0,
-  Weekly = 1,
-  Custom = 2,
+  Monthly = 'Monthly',
+  Weekly = 'Weekly',
+  Custom = 'Custom',
 }
 
 export interface CategoryBudget {
