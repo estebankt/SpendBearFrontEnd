@@ -11,14 +11,6 @@ export default function TopBudgets() {
   const { data: budgetsData = [], isLoading, error } = useBudgets({ activeOnly: true });
   const { data: categories = [], error: catError } = useCategories();
 
-  console.log('[TopBudgets] Budgets query:', {
-    isLoading,
-    error: error ? String(error) : null,
-    budgetsData,
-    categoriesCount: categories.length,
-    catError: catError ? String(catError) : null,
-  });
-
   const budgets = useMemo(() => {
     return budgetsData
       .map((b) => mapBudget(b, categories))

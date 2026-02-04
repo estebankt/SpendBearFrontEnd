@@ -11,15 +11,12 @@ export async function proxyToBackend(
     let tokenResponse;
     try {
       tokenResponse = await auth0.getAccessToken();
-      console.log('[PROXY] getAccessToken() returned:', JSON.stringify(tokenResponse).slice(0, 300));
     } catch (tokenError) {
-      console.error('[PROXY] getAccessToken() THREW an error:', tokenError);
       return NextResponse.json({ error: 'Unauthorized', detail: String(tokenError) }, { status: 401 });
     }
     const token = tokenResponse?.token;
 
     if (!token) {
-      console.error('[PROXY] No token in response. Full tokenResponse:', tokenResponse);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -44,37 +41,30 @@ export async function proxyToBackend(
         const body = await req.json();
         fetchOptions.body = JSON.stringify(body);
       } catch {
-        // No body — that's fine for some POST requests
+        // No body — that's fine for some requests
       }
     }
 
-    console.log(`[PROXY] ${req.method} ${url.toString()} (token: ${token ? 'present' : 'MISSING'})`);
-
     const response = await fetch(url.toString(), fetchOptions);
-
-    console.log(`[PROXY] Response: ${response.status} ${response.statusText} from ${url.toString()}`);
 
     // Handle 204 No Content
     if (response.status === 204) {
       return new NextResponse(null, { status: 204 });
     }
 
-    // Try to parse JSON response
+    // Try to parse JSON response (includes application/problem+json from ASP.NET Core)
     const contentType = response.headers.get('content-type');
-    if (contentType?.includes('application/json')) {
+    if (contentType?.includes('json')) {
       const data = await response.json();
-      console.log(`[PROXY] JSON data from ${backendPath}:`, JSON.stringify(data).slice(0, 500));
       return NextResponse.json(data, { status: response.status });
     }
 
     // Non-JSON response
     const text = await response.text();
-    console.log(`[PROXY] Non-JSON response from ${backendPath}:`, text.slice(0, 200));
     return new NextResponse(text, { status: response.status });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const stack = error instanceof Error ? error.stack : undefined;
-    console.error('Proxy error:', message, stack);
+    console.error('[PROXY] Error:', message);
     return NextResponse.json(
       { error: 'Failed to proxy request to backend', detail: message },
       { status: 502 }

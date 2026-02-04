@@ -12,14 +12,6 @@ export default function RecentTransactions() {
   const { data: transactionsData, isLoading, error } = useTransactions({ pageSize: 5 });
   const { data: categories = [], error: catError } = useCategories();
 
-  console.log('[RecentTransactions] Transactions query:', {
-    isLoading,
-    error: error ? String(error) : null,
-    transactionsData,
-    categoriesCount: categories.length,
-    catError: catError ? String(catError) : null,
-  });
-
   const transactions = useMemo(() => {
     if (!transactionsData?.items) return [];
     return transactionsData.items.map((t) => mapTransaction(t, categories));

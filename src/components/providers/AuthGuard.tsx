@@ -10,16 +10,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const registerMutation = useRegister();
   const attemptedRegister = useRef(false);
 
-  console.log('[AUTHGUARD] State:', {
-    auth0User: auth0User?.email ?? null,
-    auth0Loading,
-    backendUser,
-    backendLoading,
-    backendError: backendError ? String(backendError) : null,
-    registerPending: registerMutation.isPending,
-    registerSuccess: registerMutation.isSuccess,
-  });
-
   const is404 =
     backendError &&
     'response' in (backendError as unknown as Record<string, unknown>) &&

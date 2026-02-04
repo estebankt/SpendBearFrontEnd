@@ -22,11 +22,8 @@ import type {
 
 export const identityApi = {
   me: async (): Promise<ApiUser> => {
-    console.log('[ENDPOINTS] identityApi.me called');
-    const response = await apiClient.get('/identity/me');
-    console.log('[ENDPOINTS] identityApi.me response status:', response.status);
-    console.log('[ENDPOINTS] identityApi.me response data:', JSON.stringify(response.data).slice(0, 200));
-    return response.data;
+    const { data } = await apiClient.get('/identity/me');
+    return data;
   },
   register: async (input: RegisterUserInput): Promise<void> => {
     await apiClient.post('/identity/register', input);
@@ -35,11 +32,8 @@ export const identityApi = {
 
 export const transactionApi = {
   list: async (params?: TransactionListParams): Promise<PaginatedResponse<ApiTransaction>> => {
-    console.log('[ENDPOINTS] transactionApi.list called with params:', params);
-    const response = await apiClient.get('/transactions', { params });
-    console.log('[ENDPOINTS] transactionApi.list response status:', response.status);
-    console.log('[ENDPOINTS] transactionApi.list response data:', JSON.stringify(response.data).slice(0, 500));
-    return response.data;
+    const { data } = await apiClient.get('/transactions', { params });
+    return data;
   },
   create: async (input: CreateTransactionInput): Promise<ApiTransaction> => {
     const { data } = await apiClient.post('/transactions', input);
@@ -55,11 +49,8 @@ export const transactionApi = {
 
 export const categoryApi = {
   list: async (): Promise<ApiCategory[]> => {
-    console.log('[ENDPOINTS] categoryApi.list called');
-    const response = await apiClient.get('/categories');
-    console.log('[ENDPOINTS] categoryApi.list response status:', response.status);
-    console.log('[ENDPOINTS] categoryApi.list response data:', JSON.stringify(response.data).slice(0, 500));
-    return response.data;
+    const { data } = await apiClient.get('/categories');
+    return data;
   },
   create: async (input: CreateCategoryInput): Promise<ApiCategory> => {
     const { data } = await apiClient.post('/categories', input);
@@ -69,11 +60,8 @@ export const categoryApi = {
 
 export const budgetApi = {
   list: async (params?: BudgetListParams): Promise<ApiBudget[]> => {
-    console.log('[ENDPOINTS] budgetApi.list called with params:', params);
-    const response = await apiClient.get('/budgets', { params });
-    console.log('[ENDPOINTS] budgetApi.list response status:', response.status);
-    console.log('[ENDPOINTS] budgetApi.list response data:', JSON.stringify(response.data).slice(0, 500));
-    return response.data;
+    const { data } = await apiClient.get('/budgets', { params });
+    return data;
   },
   create: async (input: CreateBudgetInput): Promise<ApiBudget> => {
     const { data } = await apiClient.post('/budgets', input);
@@ -89,13 +77,10 @@ export const budgetApi = {
 
 export const analyticsApi = {
   monthlySummary: async (year: number, month: number): Promise<ApiMonthlySummary> => {
-    console.log('[ENDPOINTS] analyticsApi.monthlySummary called with:', { year, month });
-    const response = await apiClient.get('/analytics/monthly', {
+    const { data } = await apiClient.get('/analytics/monthly', {
       params: { year, month },
     });
-    console.log('[ENDPOINTS] analyticsApi.monthlySummary response status:', response.status);
-    console.log('[ENDPOINTS] analyticsApi.monthlySummary response data:', JSON.stringify(response.data).slice(0, 500));
-    return response.data;
+    return data;
   },
 };
 

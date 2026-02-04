@@ -8,14 +8,6 @@ export default function KPICards() {
   const now = new Date();
   const { data, isLoading, error } = useMonthlyAnalytics(now.getFullYear(), now.getMonth() + 1);
 
-  console.log('[KPICards] Analytics query:', {
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-    isLoading,
-    error: error ? String(error) : null,
-    data,
-  });
-
   const totalIncome = data?.totalIncome ?? 0;
   const totalExpense = data?.totalExpense ?? 0;
   const netBalance = data?.netBalance ?? 0;
