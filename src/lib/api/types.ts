@@ -110,3 +110,45 @@ export interface NotificationListParams {
   pageNumber?: number;
   pageSize?: number;
 }
+
+// Statement Import
+export type ImportStatus =
+  | 'Uploading'
+  | 'Parsing'
+  | 'PendingReview'
+  | 'Confirmed'
+  | 'Failed'
+  | 'Cancelled';
+
+export interface ApiParsedTransaction {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  currency: string;
+  suggestedCategoryId: string;
+  confirmedCategoryId?: string;
+}
+
+export interface ApiStatementUpload {
+  id: string;
+  originalFileName: string;
+  uploadedAt: string;
+  status: ImportStatus;
+  errorMessage?: string;
+  statementMonth?: number;
+  statementYear?: number;
+  parsedTransactions: ApiParsedTransaction[];
+}
+
+export interface ApiStatementUploadSummary {
+  id: string;
+  originalFileName: string;
+  uploadedAt: string;
+  status: ImportStatus;
+  transactionCount: number;
+}
+
+export interface UpdateCategoriesInput {
+  updates: { parsedTransactionId: string; newCategoryId: string }[];
+}

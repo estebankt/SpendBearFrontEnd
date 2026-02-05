@@ -9,6 +9,7 @@ import TransactionSummaryCards from '@/components/dashboard/transactions/Transac
 import TransactionFilters from '@/components/dashboard/transactions/TransactionFilters';
 import TransactionList from '@/components/dashboard/transactions/TransactionList';
 import TransactionFormDialog from '@/components/dashboard/transactions/TransactionFormDialog';
+import StatementImportDialog from '@/components/dashboard/transactions/StatementImportDialog';
 import type { ApiTransaction } from '@/lib/api/types';
 
 export default function TransactionsPage() {
@@ -21,6 +22,7 @@ export default function TransactionsPage() {
   // Form dialog state
   const [formOpen, setFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<ApiTransaction | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   // Build API params (server-side filtering for category and type)
   const apiParams = useMemo(() => ({
@@ -78,7 +80,10 @@ export default function TransactionsPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-surface-dark-highlight text-text-main rounded-lg font-medium hover:bg-surface-dark transition-colors flex items-center gap-2">
+          <button
+            onClick={() => setImportOpen(true)}
+            className="px-4 py-2 bg-surface-dark-highlight text-text-main rounded-lg font-medium hover:bg-surface-dark transition-colors flex items-center gap-2"
+          >
             <span className="material-symbols-outlined text-xl">upload</span>
             Import
           </button>
@@ -147,6 +152,12 @@ export default function TransactionsPage() {
         open={formOpen}
         onOpenChange={setFormOpen}
         transaction={editingTransaction}
+      />
+
+      {/* Statement Import Dialog */}
+      <StatementImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
       />
     </div>
   );

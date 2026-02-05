@@ -10,6 +10,9 @@ import type {
   TransactionListParams,
   BudgetListParams,
   NotificationListParams,
+  ApiStatementUpload,
+  ApiStatementUploadSummary,
+  UpdateCategoriesInput,
 } from './types';
 import type {
   CreateTransactionInput,
@@ -91,5 +94,34 @@ export const notificationApi = {
   },
   markRead: async (id: string): Promise<void> => {
     await apiClient.put(`/notifications/${id}/read`);
+  },
+};
+
+export const statementImportApi = {
+  upload: async (file: File): Promise<ApiStatementUpload> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await apiClient.post('/statement-import/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000, // 2 minutes - AI processing takes time
+    });
+    return data;
+  },
+  get: async (id: string): Promise<ApiStatementUpload> => {
+    const { data } = await apiClient.get(`/statement-import/${id}`);
+    return data;
+  },
+  list: async (): Promise<ApiStatementUploadSummary[]> => {
+    const { data } = await apiClient.get('/statement-import');
+    return data;
+  },
+  updateCategories: async (id: string, input: UpdateCategoriesInput): Promise<void> => {
+    await apiClient.put(`/statement-import/${id}/transactions`, input);
+  },
+  confirm: async (id: string): Promise<void> => {
+    await apiClient.post(`/statement-import/${id}/confirm`);
+  },
+  cancel: async (id: string): Promise<void> => {
+    await apiClient.post(`/statement-import/${id}/cancel`);
   },
 };
