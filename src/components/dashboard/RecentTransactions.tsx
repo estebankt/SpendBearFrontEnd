@@ -104,7 +104,7 @@ export default function RecentTransactions() {
                     <td className="py-4 px-4 text-right">
                       <span
                         className={`text-sm font-bold ${
-                          isIncome ? 'text-accent-green' : 'text-text-main'
+                          isIncome ? 'text-accent-green' : 'text-primary'
                         }`}
                       >
                         {isIncome ? '+' : '-'}{formatCurrency(transaction.amount)}

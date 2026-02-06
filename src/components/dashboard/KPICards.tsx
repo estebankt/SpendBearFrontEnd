@@ -43,7 +43,7 @@ export default function KPICards() {
             </div>
             <div>
               <p className="text-xs text-text-muted font-medium">Net Balance</p>
-              <p className="text-2xl font-bold text-text-main">
+              <p className={`text-2xl font-bold ${netBalance >= 0 ? 'text-text-main' : 'text-primary'}`}>
                 {formatCurrency(netBalance)}
               </p>
             </div>

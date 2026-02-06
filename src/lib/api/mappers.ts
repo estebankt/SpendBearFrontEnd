@@ -4,21 +4,48 @@ import { TransactionType, BudgetPeriod } from '@/lib/types';
 
 // Category name → display config lookup
 const CATEGORY_DISPLAY: Record<string, { icon: string; color: string }> = {
-  'Groceries': { icon: 'shopping_cart', color: '#66D9EF' },
-  'Dining Out': { icon: 'restaurant', color: '#F92672' },
-  'Transportation': { icon: 'directions_car', color: '#E6DB74' },
+  // Food & Drink (Pink)
+  'Groceries': { icon: 'shopping_cart', color: '#f92472' },
+  'Dining Out': { icon: 'restaurant', color: '#f92472' },
+  'Fast Food': { icon: 'fastfood', color: '#f92472' },
+  'Coffee/Tea': { icon: 'coffee', color: '#f92472' },
+  'Alcohol/Bars': { icon: 'wine_bar', color: '#f92472' },
+
+  // Transportation & Travel (Blue)
+  'Gas/Fuel': { icon: 'local_gas_station', color: '#66d9ef' },
+  'Public Transit': { icon: 'directions_bus', color: '#66d9ef' },
+  'Rideshare/Taxi': { icon: 'local_taxi', color: '#66d9ef' },
+  'Parking': { icon: 'local_parking', color: '#66d9ef' },
+  'Vehicle Maintenance': { icon: 'car_repair', color: '#66d9ef' },
+  'Travel': { icon: 'flight', color: '#66d9ef' },
+
+  // Housing & Utilities (Yellow)
+  'Rent/Mortgage': { icon: 'home', color: '#e6db74' },
+  'Utilities': { icon: 'bolt', color: '#e6db74' },
+  'Internet/Phone': { icon: 'wifi', color: '#e6db74' },
+  'Insurance': { icon: 'security', color: '#e6db74' },
+  'Home Goods': { icon: 'chair', color: '#e6db74' },
+  'Home Office': { icon: 'desk', color: '#e6db74' },
+  'Education': { icon: 'school', color: '#e6db74' },
+
+  // Lifestyle, Shopping & Entertainment (Purple)
   'Entertainment': { icon: 'movie', color: '#AE81FF' },
-  'Shopping': { icon: 'shopping_bag', color: '#FD971F' },
-  'Healthcare': { icon: 'local_hospital', color: '#A6E22E' },
-  'Utilities': { icon: 'bolt', color: '#75715E' },
-  'Salary': { icon: 'payments', color: '#A6E22E' },
-  'Freelance': { icon: 'work', color: '#66D9EF' },
-  'Rent': { icon: 'home', color: '#F92672' },
-  'Subscriptions': { icon: 'subscriptions', color: '#AE81FF' },
-  'Fitness': { icon: 'fitness_center', color: '#A6E22E' },
-  'Travel': { icon: 'flight', color: '#66D9EF' },
-  'Gifts': { icon: 'card_giftcard', color: '#F92672' },
-  'Education': { icon: 'school', color: '#E6DB74' },
+  'Subscriptions': { icon: 'autorenew', color: '#AE81FF' },
+  'Electronics': { icon: 'devices', color: '#AE81FF' },
+  'Clothing': { icon: 'checkroom', color: '#AE81FF' },
+  'Hobbies': { icon: 'palette', color: '#AE81FF' },
+  'Gifts/Donations': { icon: 'volunteer_activism', color: '#AE81FF' },
+
+  // Health & Care (Orange)
+  'Healthcare': { icon: 'medical_services', color: '#FD971F' },
+  'Personal Care': { icon: 'face', color: '#FD971F' },
+  'Fitness': { icon: 'fitness_center', color: '#FD971F' },
+  'Pet Care': { icon: 'pets', color: '#FD971F' },
+
+  // Income (Green)
+  'Salary': { icon: 'payments', color: '#a6e22e' },
+  'Side Hustle Income': { icon: 'monetization_on', color: '#a6e22e' },
+  'Freelance Work': { icon: 'work', color: '#a6e22e' },
 };
 
 const DEFAULT_DISPLAY = { icon: 'category', color: '#75715E' };

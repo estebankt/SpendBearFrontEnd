@@ -17,13 +17,13 @@ export default function Logo({ variant = 'header', size, className }: LogoProps)
 
   const containerClasses = {
     header: 'bg-primary',
-    sidebar: 'bg-accent-yellow',
+    sidebar: 'bg-primary',
     footer: 'bg-primary',
   };
 
   const iconClasses = {
     header: 'text-white',
-    sidebar: 'text-background-dark',
+    sidebar: 'text-white',
     footer: 'text-white',
   };
 

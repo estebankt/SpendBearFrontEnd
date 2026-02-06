@@ -7,6 +7,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "SpendBear - Minimalist Spend Tracker",
   description: "Stop wondering where your money went. SpendBear is the minimalist tracker designed for clarity, built for modern spenders who value data over clutter.",
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -17,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <link rel="icon" href="/logo.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
           rel="stylesheet"

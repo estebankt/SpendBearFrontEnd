@@ -72,7 +72,7 @@ export default function TransactionRow({ transaction, onEdit }: TransactionRowPr
       <td className="py-4 px-4 text-right">
         <p
           className={`text-sm font-semibold ${
-            isIncome ? 'text-accent-green' : 'text-text-main'
+            isIncome ? 'text-accent-green' : 'text-primary'
           }`}
         >
           {isIncome ? '+' : '-'}{formatCurrency(transaction.amount)}
