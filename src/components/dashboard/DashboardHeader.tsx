@@ -1,6 +1,7 @@
 'use client';
 
 import { getFirstName } from '@/lib/utils';
+import NotificationDropdown from './NotificationDropdown';
 
 interface DashboardHeaderProps {
   user: {
@@ -23,9 +24,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-dark-highlight text-text-main hover:bg-surface-dark transition-colors">
-          <span className="material-symbols-outlined text-[20px]">notifications</span>
-        </button>
+        <NotificationDropdown />
         <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-dark-highlight text-text-main hover:bg-surface-dark transition-colors">
           <span className="material-symbols-outlined text-[20px]">calendar_today</span>
           <span className="text-sm font-medium">Oct 1 - Oct 31</span>
