@@ -8,7 +8,7 @@ export default function CTASection() {
           Ready to take control?
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-text-muted">
-          Join SpendBear today and start your journey to financial clarity. No credit card required for the free tier.
+          Join SpendBear today and start your journey to financial clarity. Free to use, no credit card required.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button href="/auth/login" variant="primary" size="md" className="hover:scale-[1.02]">

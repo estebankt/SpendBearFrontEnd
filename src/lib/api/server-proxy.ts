@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth0 } from '@/lib/auth0';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5109';
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5109';
 
 export async function proxyToBackend(
   req: NextRequest,
@@ -64,7 +64,9 @@ export async function proxyToBackend(
     return new NextResponse(text, { status: response.status });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error('[PROXY] Error:', message);
+    const cause = error instanceof Error && (error as NodeJS.ErrnoException).cause;
+    const code = error instanceof Error && (error as NodeJS.ErrnoException).code;
+    console.error('[PROXY] Error proxying to', BACKEND_URL, backendPath, { message, code, cause });
     return NextResponse.json(
       { error: 'Failed to proxy request to backend', detail: message },
       { status: 502 }

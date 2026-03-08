@@ -6,7 +6,7 @@ export default function PrivacySection() {
     },
     {
       title: 'No Ads, No Selling Data',
-      description: 'We make money from subscriptions, not by selling your financial life to advertisers.',
+      description: 'We don\'t sell your data or show you ads. Your financial life is yours alone.',
     },
     {
       title: 'Keyboard Optimized',
