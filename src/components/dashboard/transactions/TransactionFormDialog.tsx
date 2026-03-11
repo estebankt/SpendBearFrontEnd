@@ -1,12 +1,21 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, type CreateTransactionInput } from '@/lib/api/schemas';
 import { useCreateTransaction, useUpdateTransaction } from '@/lib/hooks/use-transactions';
 import { useCategories } from '@/lib/hooks/use-categories';
 import type { ApiTransaction } from '@/lib/api/types';
+
+const EMPTY_DEFAULTS: CreateTransactionInput = {
+  amount: 0,
+  currency: 'USD',
+  date: '',
+  description: '',
+  categoryId: '',
+  type: 'Expense',
+};
 
 interface TransactionFormDialogProps {
   open: boolean;
@@ -32,20 +41,21 @@ export default function TransactionFormDialog({
     formState: { errors },
   } = useForm<CreateTransactionInput>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues: {
-      amount: 0,
-      currency: 'USD',
-      date: new Date().toISOString().slice(0, 16),
-      description: '',
-      categoryId: '',
-      type: 'Expense' as const,
-    },
+    defaultValues: EMPTY_DEFAULTS,
   });
 
-  // Reset form when dialog opens/closes or transaction changes
+  // Reset form when dialog opens/closes or transaction changes.
+  // `reset` is intentionally omitted from deps — it's a stable RHF reference.
+  // Including it caused the effect to re-fire on every render (because
+  // the inline defaultValues object changed identity each render), which reset
+  // the form while the user was filling it out.
+  const resetRef = useRef(reset);
+  resetRef.current = reset;
+
   useEffect(() => {
-    if (open && transaction) {
-      reset({
+    if (!open) return;
+    if (transaction) {
+      resetRef.current({
         amount: transaction.amount,
         currency: transaction.currency,
         date: transaction.date.slice(0, 16),
@@ -53,17 +63,14 @@ export default function TransactionFormDialog({
         categoryId: transaction.categoryId,
         type: transaction.type as 'Income' | 'Expense',
       });
-    } else if (open) {
-      reset({
-        amount: 0,
-        currency: 'USD',
+    } else {
+      resetRef.current({
+        ...EMPTY_DEFAULTS,
         date: new Date().toISOString().slice(0, 16),
-        description: '',
-        categoryId: '',
-        type: 'Expense' as const,
       });
     }
-  }, [open, transaction, reset]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, transaction]);
 
   const onSubmit = (data: CreateTransactionInput) => {
     // Ensure date is in ISO format
