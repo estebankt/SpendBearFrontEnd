@@ -31,8 +31,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [is404, auth0User, registerMutation]);
 
-  // Show loading while Auth0 or backend user is loading, or while registering
-  if (auth0Loading || backendLoading || registerMutation.isPending) {
+  // Show loading while Auth0 or backend user is loading, or while registration is pending/not yet attempted
+  if (auth0Loading || backendLoading || registerMutation.isPending || (is404 && !registerMutation.isSuccess && !registerMutation.isError)) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="flex flex-col items-center gap-4">
@@ -43,8 +43,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // If there's an error that's not a 404 (and not a registration attempt), show error
-  if (backendError && !is404 && !registerMutation.isSuccess) {
+  // If there's any unrecoverable error (non-404, or failed registration), show error
+  if ((backendError && !is404 && !registerMutation.isSuccess) || registerMutation.isError) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="flex flex-col items-center gap-4">
